@@ -1,0 +1,150 @@
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: white;
+    --on-bg: #555;
+    --secondary: #f3f4f6;
+    --on-secondary: #555;
+    --accent: #075985;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #18181b;
+    --on-bg: #efefef;
+    --secondary: #27272a;
+    --on-secondary: #52525b;
+    --accent: #a5b4fc;
+  }
+}
+
+* {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--on-bg);
+  font-family: "Helvetica Neue", Helvetica, sans-serif;
+  line-height: 1.7;
+  font-size: 18px;
+  margin: 0 6rem;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+p {
+  padding: 10px 0;
+}
+
+main dl, main ul {
+  list-style: none;
+  padding: 10px 0;
+}
+
+main dl div {
+  padding: 4px 0;
+}
+
+main dl div dt {
+  white-space: nowrap;
+}
+
+main dl.bulleted dt::before, main ul li::before {
+  content: "\2022";
+  font-size: 15px;
+  vertical-align: middle;
+  padding: 5px;
+  line-height: 1.5;
+  color: var(--accent);
+}
+
+main dl a, main ul a {
+  font-weight: bold;
+}
+
+#post-container {
+  padding: 20px 0;
+}
+
+nav {
+  height: 80px;
+  border-bottom: 1px solid var(--secondary);
+  box-sizing: border-box;
+}
+
+nav > .container {
+  display: flex;
+  height: inherit;
+}
+
+nav ul {
+  display: flex;
+  list-style: none;
+  align-items: center;
+}
+
+nav #logo {
+  display: flex;
+  align-items: center;
+  margin: 0 30px 0 20px;
+}
+
+nav #logo a {
+  text-decoration: none;
+  color: var(--on-bg);
+}
+
+nav ul li {
+  padding: 0 10px;
+  text-decoration: none;
+}
+
+nav ul li a {
+  text-decoration: none;
+  font-weight: bold;
+  color: var(--on-bg);
+}
+
+body > .container {
+  min-height: calc(100vh - 80px);
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: auto;
+  padding: 20px;
+}
+
+.title {
+  padding: 10px 0px;
+}
+
+footer {
+  border-top: 1px solid var(--secondary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80px;
+  box-sizing: border-box;
+}
+
+.text-bold {
+  font-weight: bold;
+}
+
+.text-italic {
+  font-style: italic;
+}
+
+@media screen and (max-width: 800px) {
+  body {
+    font-size: 15px;
+    margin: 0 10px;
+  }
+}
