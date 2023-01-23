@@ -165,7 +165,7 @@ nav ul li a {
 }
 
 .mobile-menu:checked ~ nav {
-  max-height: 100vh;
+  max-height: calc(100vh - 80px);
 }
 
 .mobile-menu:checked ~ .hamburger .hamburger-icon {
