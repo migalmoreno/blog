@@ -111,30 +111,36 @@
               (src ,(string-append "/assets/js/" name ".js")))))
 
 (define navbar
-  `(nav
-    (div (@ (class "container"))
-         (div (@ (id "logo"))
-          (h3 ,(anchor "(cons e s)" "/")))
-         (ul
-          ,@(map (lambda (a)
-                   `(li ,(anchor (car a) (cdr a))))
-                 '(("Home" . "/")
-                   ("Projects" . "/projects.html")
-                   ("Blog" . "/posts")
-                   ("Contact" . "/contact.html")))))))
+  `(header
+    (div (@ (id "logo"))
+         (h3 ,(anchor "(cons e s)" "/")))
+    (input (@ (class "mobile-menu") (type "checkbox") (id "mobile-menu")))
+    (label (@ (class "hamburger") (for "mobile-menu"))
+           (span (@ (class "hamburger-icon"))))
+    (nav
+     (ul
+      ,@(map (lambda (a)
+               `(li ,(anchor (car a) (cdr a))))
+             '(("Home" . "/")
+               ("Projects" . "/projects.html")
+               ("Blog" . "/posts")
+               ("Contact" . "/contact.html")))))))
 
 (define footer
   `(footer
     (div (@ (class "container"))
          "© "
          (span (@ (id "year")))
-         " conses")))
+         " conses —"
+         (span (@ (id "source"))
+               ,(anchor "Source" "https://git.sr.ht/~conses/conses")))))
 
 (define (base-layout site title body)
   `((doctype "html")
     (html
      (head
       (meta (@ (charset "utf-8")))
+      (meta (@ (name "viewport") (content "width=device-width,initial-scale=1")))
       (title ,(string-append (site-title site) " - " title))
       ,(stylesheet "main"))
      (body
