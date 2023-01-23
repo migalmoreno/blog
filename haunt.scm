@@ -30,7 +30,6 @@
    `((div (@ (id "about"))
            (h1 (@ (class "title")) "About me")
            (p "Software engineer and recent Computer Science graduate.")
-           (br)
            (p "My interests currently revolve around the following topics.")
            (ul
             (li "Functional programming")
