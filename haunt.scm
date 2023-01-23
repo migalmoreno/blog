@@ -60,7 +60,7 @@
                      "A general-purpose routing extension for the Nyxt browser")
       ,(project-item "nx-tailor" "https://github.com/efimerspan/nx-tailor" "Author"
                      "A theme manager for the Nyxt browser")
-      ,(project-item "fdroid.el" "https://github.com/efimerspan/nfdroid.el" "Author"
+      ,(project-item "fdroid.el" "https://github.com/efimerspan/fdroid.el" "Author"
                      "An Emacs interface to the F-Droid package repository")
       ,(project-item "nyxt.el" "https://github.com/efimerspan/nyxt.el" "Author"
                      "A minimal API to interact with the Nyxt browser from Emacs")
