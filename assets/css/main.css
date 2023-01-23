@@ -21,6 +21,7 @@
 * {
   padding: 0;
   margin: 0;
+  box-sizing: border-box;
 }
 
 body {
@@ -32,13 +33,16 @@ body {
   margin: 0 6rem;
 }
 
+p {
+  padding: 10px 0;
+}
+
 a {
-  color: var(--accent);
   text-decoration: none;
 }
 
-p {
-  padding: 10px 0;
+main a {
+  color: var(--accent);
 }
 
 main dl, main ul {
@@ -54,12 +58,15 @@ main dl div dt {
   white-space: nowrap;
 }
 
+main dl div dd {
+  padding-left: 30px;
+}
 main dl.bulleted dt::before, main ul li::before {
   content: "\2022";
   font-size: 15px;
   vertical-align: middle;
-  padding: 5px;
-  line-height: 1.5;
+  padding: 0 5px;
+  line-height: 1.7;
   color: var(--accent);
 }
 
@@ -71,36 +78,46 @@ main dl a, main ul a {
   padding: 20px 0;
 }
 
-nav {
+header {
   height: 80px;
   border-bottom: 1px solid var(--secondary);
   box-sizing: border-box;
-}
-
-nav > .container {
   display: flex;
-  height: inherit;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
-nav ul {
-  display: flex;
-  list-style: none;
-  align-items: center;
-}
-
-nav #logo {
+#logo {
   display: flex;
   align-items: center;
   margin: 0 30px 0 20px;
 }
 
-nav #logo a {
+#logo a {
   text-decoration: none;
   color: var(--on-bg);
 }
 
+nav {
+  display: flex;
+  align-items: center;
+  max-height: none;
+  background: var(--bg);
+  overflow: hidden;
+  transition: max-height .2s ease-out;
+}
+
+nav ul {
+  height: inherit;
+  width: 100%;
+  display: flex;
+  list-style: none;
+  align-items: center;
+  justify-content: center;
+}
+
 nav ul li {
-  padding: 0 10px;
+  padding: 20px;
   text-decoration: none;
 }
 
@@ -108,6 +125,61 @@ nav ul li a {
   text-decoration: none;
   font-weight: bold;
   color: var(--on-bg);
+}
+
+.hamburger {
+  cursor: pointer;
+  float: right;
+  padding: 40px 20px;
+  display: none;
+}
+
+.hamburger-icon {
+  height: 2px;
+  width: 24px;
+  display: block;
+  position: relative;
+  background: var(--on-bg);
+}
+
+.hamburger-icon::before, .hamburger-icon::after {
+  background: var(--on-bg);
+  content: "";
+  display: block;
+  height: 100%;
+  position: absolute;
+  transition: all .2s ease-out;
+  width: 100%;
+}
+
+.hamburger-icon::before {
+  top: 5px;
+}
+
+.hamburger-icon::after {
+  top: -5px;
+}
+
+.mobile-menu {
+  display: none;
+}
+
+.mobile-menu:checked ~ nav {
+  max-height: 100vh;
+}
+
+.mobile-menu:checked ~ .hamburger .hamburger-icon {
+  background: transparent;
+}
+
+.mobile-menu:checked ~ .hamburger .hamburger-icon::before {
+  transform: rotate(-45deg);
+  top: 0;
+}
+
+.mobile-menu:checked ~ .hamburger .hamburger-icon::after {
+  transform: rotate(45deg);
+  top: 0;
 }
 
 body > .container {
@@ -119,10 +191,7 @@ body > .container {
 main {
   flex: auto;
   padding: 20px;
-}
-
-.title {
-  padding: 10px 0px;
+  margin: 0 6rem;
 }
 
 footer {
@@ -134,6 +203,19 @@ footer {
   box-sizing: border-box;
 }
 
+#source {
+  padding: 0 5px;
+}
+
+#source a {
+  color: var(--on-bg);
+  font-weight: 600;
+}
+
+.title {
+  padding: 10px 0px;
+}
+
 .text-bold {
   font-weight: bold;
 }
@@ -142,9 +224,35 @@ footer {
   font-style: italic;
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 1024px) {
+  main {
+    margin: 0;
+  }
+}
+
+@media screen and (max-width: 768px) {
   body {
     font-size: 15px;
     margin: 0 10px;
+  }
+
+  .hamburger {
+    display: block;
+  }
+
+  nav {
+    max-height: 0;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    top: 80px;
+  }
+
+  nav ul {
+    flex-direction: column;
+  }
+
+  nav ul li {
+    font-size: 18px;
   }
 }
