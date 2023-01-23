@@ -69,7 +69,7 @@
                      "A functional, transactional, and declarative package manager")
       ,(project-item "RDE" "https://sr.ht/~abcdw/rde" "Co-maintainer"
                      "A configuration framework on top of GNU Guix")
-      ,(project-item "mpv.el" "https//github.com/kljohann/mpv.el" "Contributor"
+      ,(project-item "mpv.el" "https://github.com/kljohann/mpv.el" "Contributor"
                      "Helpers to interact with MPV from Emacs via its IPC interface")
       ,(project-item "Nyxt" "https://github.com/atlas-engineer/nyxt" "Contributor"
                      "An infinitely extensible power browser")
