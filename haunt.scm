@@ -53,17 +53,17 @@
    `((h1 (@ (class "title")) "Projects")
      (p "Some of the open source projects I've been involved in.")
      (dl (@ (class "bulleted"))
-      ,(project-item "Tubo" "https://github.com/efimerspan/tubo" "Author"
+      ,(project-item "Tubo" "https://sr.ht/~conses/tubo" "Author"
                      "A web client for many streaming sites")
-      ,(project-item "nx-router" "https://github.com/efimerspan/nx-router" "Author"
+      ,(project-item "nx-router" "https://sr.ht/~conses/nx-router" "Author"
                      "A general-purpose routing extension for the Nyxt browser")
-      ,(project-item "nx-tailor" "https://github.com/efimerspan/nx-tailor" "Author"
+      ,(project-item "nx-tailor" "https://sr.ht/~conses/nx-tailor" "Author"
                      "A theme manager for the Nyxt browser")
-      ,(project-item "fdroid.el" "https://github.com/efimerspan/fdroid.el" "Author"
+      ,(project-item "fdroid.el" "https://sr.ht/~conses/fdroid.el" "Author"
                      "An Emacs interface to the F-Droid package repository")
-      ,(project-item "nyxt.el" "https://github.com/efimerspan/nyxt.el" "Author"
+      ,(project-item "nyxt.el" "https://sr.ht/~conses/nyxt.el" "Author"
                      "A minimal API to interact with the Nyxt browser from Emacs")
-      ,(project-item "dotfiles" "https://github.com/efimerspan/dotfiles" "Author"
+      ,(project-item "dotfiles" "https://sr.ht/~conses/dotfiles" "Author"
                      "My personal set of configuration files, based on top of RDE and GNU Guix")
       ,(project-item "GNU Guix" "https://guix.gnu.org" "Contributor"
                      "A functional, transactional, and declarative package manager")
@@ -85,9 +85,8 @@
    `((h1 (@ (class "title")) "Contact me")
      (dl
       (div
-       (dt (@ (class "text-bold text-italic")) "Source Forges")
-       (dd ,(anchor  "Sourcehut" "https://sr.ht/~conses" #:external? #t))
-       (dd ,(anchor "GitHub" "https://github.com/efimerspan" #:external? #t)))
+       (dt (@ (class "text-bold text-italic")) "Sourcehut")
+       (dd ,(anchor  "~conses" "https://sr.ht/~conses" #:external? #t)))
       (div
        (dt (@ (class "text-bold text-italic")) "Email")
        (dd (code "contact") " at " (code "$DOMAIN")))
