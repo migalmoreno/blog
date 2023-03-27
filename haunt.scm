@@ -172,11 +172,11 @@
          #:post-template post-template
          #:collection-template collection-template))
 
-(site #:title "conses"
-      #:domain "conses.eu"
+(site #:title "Miguel Moreno"
+      #:domain "mmoreno.eu"
       #:default-metadata
-      '((author . "conses")
-        (email . "contact@conses.eu"))
+      '((author . "Miguel Moreno")
+        (email . "mmoreno@mmoreno.eu"))
       #:readers (list html-reader)
       #:builders (list index-page
                        (blog #:prefix "/posts"
