@@ -28,22 +28,26 @@
    "Home"
    "index.html"
    `((div (@ (id "about"))
-           (h1 (@ (class "title")) "About me")
-           (p "Software engineer and recent Computer Science graduate.")
-           (p "My interests currently revolve around the following topics.")
-           (ul
-            (li "Functional programming")
-            (li "LISP")
-            (li "Web development")
-            (li "Operating systems")
-            (li "Introspectable and extensible tooling")
-            (li "Digital privacy")
-            (li "Free and open source software"))))))
+          (h1 (@ (class "title")) "Hi! Welcome to my site")
+          (p ,(string-join
+               (list
+                "I'm Miguel Moreno, a software engineer based in Spain"
+                "and a recent BSc. Computer Science graduate.")))
+          (p "My interests currently revolve around the topics below.")
+          (ul
+           (li "Functional programming")
+           (li "LISP")
+           (li "Web development")
+           (li "Operating systems")
+           (li "Introspectable and extensible tooling")
+           (li "Digital privacy")
+           (li "Free and open source software"))))))
 
 (define (project-item label link involvement description)
   `(div
     (dt ,(anchor label link #:external? #t)
-        (span (@ (class "text-italic")) ,(string-append " (" involvement ")")))
+        (span (@ (class "text-italic"))
+              ,(string-append " (" involvement ")")))
     (dd ,description)))
 
 (define projects-page
