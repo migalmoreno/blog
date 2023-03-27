@@ -120,9 +120,11 @@
        (dt (@ (class "text-bold text-italic")) "Matrix")
        (dd (code "@sloan:$DOMAIN")))))))
 
-(define (stylesheet name)
+(define* (stylesheet name #:key local?)
   `(link (@ (rel "stylesheet")
-            (href ,(string-append "/assets/css/" name ".css")))))
+            (href ,(if local?
+                       (string-append "/assets/css/" name ".css")
+                       name)))))
 
 (define (script name)
   `(script (@ (type "text/javascript")
@@ -131,7 +133,7 @@
 (define navbar
   `(header
     (div (@ (id "logo"))
-         (h3 ,(anchor "(cons e s)" "/")))
+         ,(anchor '(i (@ (class "fa-solid fa-puzzle-piece"))) "/"))
     (input (@ (class "mobile-menu") (type "checkbox") (id "mobile-menu")))
     (label (@ (class "hamburger") (for "mobile-menu"))
            (span (@ (class "hamburger-icon"))))
@@ -158,9 +160,11 @@
     (html
      (head
       (meta (@ (charset "utf-8")))
-      (meta (@ (name "viewport") (content "width=device-width,initial-scale=1")))
+      (meta (@ (name "viewport")
+               (content "width=device-width,initial-scale=1")))
       (title ,(string-append (site-title site) " - " title))
-      ,(stylesheet "main"))
+      ,(stylesheet "main" #:local? #t)
+      ,(stylesheet "https://use.fontawesome.com/releases/v6.3.0/css/all.css"))
      (body
       ,navbar
       (div (@ (class "container"))
@@ -179,7 +183,8 @@
          (ul
           ,@(map (lambda (post)
                    `(li ,(anchor (post-ref post 'title) (post-uri site post))
-                        ,(string-append " on " (date->string* (post-date post)))))
+                        ,(string-append
+                          " on " (date->string* (post-date post)))))
                  (posts/reverse-chronological posts))))))
 
 (define %collections
