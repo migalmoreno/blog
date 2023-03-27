@@ -51,32 +51,46 @@
    "Projects"
    "/projects.html"
    `((h1 (@ (class "title")) "Projects")
-     (p "Some of the open source projects I've been involved in.")
+     (p "Below are some of the open source projects I've worked in.")
      (dl (@ (class "bulleted"))
-      ,(project-item "Tubo" "https://sr.ht/~conses/tubo" "Author"
-                     "A web client for many streaming sites")
-      ,(project-item "nx-router" "https://sr.ht/~conses/nx-router" "Author"
-                     "A general-purpose routing extension for the Nyxt browser")
-      ,(project-item "nx-tailor" "https://sr.ht/~conses/nx-tailor" "Author"
-                     "A theme manager for the Nyxt browser")
-      ,(project-item "fdroid.el" "https://sr.ht/~conses/fdroid.el" "Author"
-                     "An Emacs interface to the F-Droid package repository")
-      ,(project-item "nyxt.el" "https://sr.ht/~conses/nyxt.el" "Author"
-                     "A minimal API to interact with the Nyxt browser from Emacs")
-      ,(project-item "dotfiles" "https://sr.ht/~conses/dotfiles" "Author"
-                     "My personal set of configuration files, based on top of RDE and GNU Guix")
-      ,(project-item "GNU Guix" "https://guix.gnu.org" "Contributor"
-                     "A functional, transactional, and declarative package manager")
-      ,(project-item "RDE" "https://sr.ht/~abcdw/rde" "Co-maintainer"
-                     "A configuration framework on top of GNU Guix")
-      ,(project-item "mpv.el" "https://github.com/kljohann/mpv.el" "Contributor"
-                     "Helpers to interact with MPV from Emacs via its IPC interface")
-      ,(project-item "Nyxt" "https://github.com/atlas-engineer/nyxt" "Contributor"
-                     "An infinitely extensible power browser")
-      ,(project-item "pulseaudio-control" "https://git.sr.ht/~flexibeast/pulseaudio-control" "Co-maintainer"
-                     "Helpers to interact with the PulseAudio daemon from Emacs")
-      ,(project-item "nx-search-engines" "https://github.com/aartaka/nx-search-engines" "Contributor"
-                     "A collection of easy-to-setup search engines for Nyxt")))))
+         ,(project-item
+           "Tubo" "https://sr.ht/~mmoreno/tubo" "Author"
+           "A web front-end for various streaming sites")
+         ,(project-item
+           "nx-router" "https://sr.ht/~mmoreno/nx-router" "Author"
+           "A general-purpose routing extension for the Nyxt browser")
+         ,(project-item
+           "nx-tailor" "https://sr.ht/~mmoreno/nx-tailor" "Author"
+           "A theme manager for the Nyxt browser")
+         ,(project-item
+           "fdroid.el" "https://sr.ht/~mmoreno/fdroid.el" "Author"
+           "An Emacs interface to the F-Droid package repository")
+         ,(project-item
+           "nyxt.el" "https://sr.ht/~mmoreno/nyxt.el" "Author"
+           "Minimal API to interact with the Nyxt browser from Emacs")
+         ,(project-item
+           "dotfiles" "https://sr.ht/~mmoreno/dotfiles" "Author"
+           "Personal configuration based on top of RDE and GNU Guix")
+         ,(project-item
+           "GNU Guix" "https://guix.gnu.org" "Contributor"
+           "Functional and declarative package manager")
+         ,(project-item
+           "RDE" "https://sr.ht/~abcdw/rde" "Co-maintainer"
+           "A configuration framework on top of GNU Guix")
+         ,(project-item
+           "mpv.el" "https://github.com/kljohann/mpv.el" "Contributor"
+           "Emacs helpers to interact with MPV via its IPC interface")
+         ,(project-item
+           "Nyxt" "https://github.com/atlas-engineer/nyxt" "Contributor"
+           "An infinitely extensible power browser")
+         ,(project-item
+           "pulseaudio-control"
+           "https://git.sr.ht/~flexibeast/pulseaudio-control" "Co-maintainer"
+           "Emacs helpers to interact with the PulseAudio daemon")
+         ,(project-item
+           "nx-search-engines"
+           "https://github.com/aartaka/nx-search-engines" "Contributor"
+           "Collection of easy-to-setup search engines for Nyxt")))))
 
 (define contact-page
   (static-page
@@ -86,13 +100,14 @@
      (dl
       (div
        (dt (@ (class "text-bold text-italic")) "Sourcehut")
-       (dd ,(anchor  "~conses" "https://sr.ht/~conses" #:external? #t)))
+       (dd ,(anchor  "~mmoreno" "https://sr.ht/~mmoreno" #:external? #t)))
       (div
        (dt (@ (class "text-bold text-italic")) "Email")
-       (dd (code "contact") " at " (code "$DOMAIN")))
+       (dd (code "mmoreno") " at " (code "$DOMAIN")))
       (div
        (dt (@ (class "text-bold text-italic")) "PGP")
-       (dd ,(anchor "4956 DAC8 B077 15EA 9F14  E13A EF1F 69BF 5F23 F458" "assets/pubkey.asc")))
+       (dd ,(anchor "4956 DAC8 B077 15EA 9F14  E13A EF1F 69BF 5F23 F458"
+                    "assets/pubkey.asc")))
       (div
        (dt (@ (class "text-bold text-italic")) "IRC")
        (dd (code "ardon") " on " ,(anchor "Libera.chat" "https://libera.chat"))
@@ -130,9 +145,9 @@
     (div (@ (class "container"))
          "© "
          (span (@ (id "year")))
-         " conses —"
+         " Miguel Moreno —"
          (span (@ (id "source"))
-               ,(anchor "Source" "https://git.sr.ht/~conses/conses")))))
+               ,(anchor "Source" "https://sr.ht/~mmoreno/mmoreno.eu")))))
 
 (define (base-layout site title body)
   `((doctype "html")
@@ -166,8 +181,8 @@
 (define %collections
   `(("Blog" "index.html" ,posts/reverse-chronological)))
 
-(define conses-haunt-theme
-  (theme #:name "conses"
+(define mmoreno-haunt-theme
+  (theme #:name "mmoreno"
          #:layout base-layout
          #:post-template post-template
          #:collection-template collection-template))
@@ -180,7 +195,7 @@
       #:readers (list html-reader)
       #:builders (list index-page
                        (blog #:prefix "/posts"
-                             #:theme conses-haunt-theme
+                             #:theme mmoreno-haunt-theme
                              #:collections %collections)
                        projects-page
                        contact-page
