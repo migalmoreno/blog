@@ -1,0 +1,14 @@
+image: guix
+packages:
+  - haunt
+  - hut
+oauth: pages.sr.ht/PAGES:RW
+environment:
+  site: mmoreno.eu
+tasks:
+  - package: |
+      cd blog
+      haunt build
+      tar -C site -cvz . > ../site.tar.gz
+  - upload: |
+      hut pages publish -d $site site.tar.gz
