@@ -132,8 +132,7 @@
 
 (define navbar
   `(header
-    (div (@ (id "logo"))
-         ,(anchor '(i (@ (class "fa-solid fa-puzzle-piece"))) "/"))
+    (div (@ (id "logo")))
     (input (@ (class "mobile-menu") (type "checkbox") (id "mobile-menu")))
     (label (@ (class "hamburger") (for "mobile-menu"))
            (span (@ (class "hamburger-icon"))))
