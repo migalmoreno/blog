@@ -12,7 +12,7 @@
 (define (static-page title filename body)
   (lambda (site posts)
     (make-page filename
-               (with-layout conses-haunt-theme site title body)
+               (with-layout mmoreno-haunt-theme site title body)
                sxml->html)))
 
 (define* (anchor label url #:key external?)
