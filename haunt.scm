@@ -59,7 +59,7 @@
      (dl (@ (class "bulleted"))
          ,(project-item
            "Tubo" "https://sr.ht/~mmoreno/tubo" "Author"
-           "A web front-end for various streaming sites")
+           "An alternative web front-end for various streaming sites")
          ,(project-item
            "nx-router" "https://sr.ht/~mmoreno/nx-router" "Author"
            "A general-purpose routing extension for the Nyxt browser")
@@ -71,13 +71,13 @@
            "An Emacs interface to the F-Droid package repository")
          ,(project-item
            "nyxt.el" "https://sr.ht/~mmoreno/nyxt.el" "Author"
-           "Minimal API to interact with the Nyxt browser from Emacs")
+           "A minimal API to interact with the Nyxt browser from Emacs")
          ,(project-item
            "dotfiles" "https://sr.ht/~mmoreno/dotfiles" "Author"
-           "Personal configuration based on top of RDE and GNU Guix")
+           "My personal configuration based on top of RDE and GNU Guix")
          ,(project-item
            "GNU Guix" "https://guix.gnu.org" "Contributor"
-           "Functional and declarative package manager")
+           "A functional and declarative package manager")
          ,(project-item
            "RDE" "https://sr.ht/~abcdw/rde" "Co-maintainer"
            "A configuration framework on top of GNU Guix")
