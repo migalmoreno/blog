@@ -1,2 +1,3 @@
 (specifications->manifest
- '("haunt"))
+ '("haunt"
+   "hut"))
