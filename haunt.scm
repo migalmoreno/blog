@@ -17,7 +17,10 @@
 
 (define* (anchor label url #:key external?)
   `(a (@ (href ,url)
-         ,@(if external? '((target "_blank")) '()))
+         ,@(if external?
+               '((rel noopener)
+                 (target _blank))
+               '()))
       ,label))
 
 (define (post-uri site post)
