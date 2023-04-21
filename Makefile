@@ -1,4 +1,11 @@
-.PHONY: publish
+DOMAIN=mmoreno.eu
+.PHONY: publish/vps publish/sourcehut
 
-publish:
-	rsync -P -rvz --delete site/ cygnus:/srv/http/conses.eu --cvs-exclude
+publish/vps:
+	haunt build
+	rsync -P -rvz --delete site/ cygnus:/srv/http/mmoreno.eu --cvs-exclude
+
+publish/sourcehut:
+	haunt build
+	tar -C site -cvz . -f site.tar.gz
+	hut pages publish -d ${DOMAIN} site.tar.gz
