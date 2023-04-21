@@ -152,7 +152,7 @@
          (span (@ (id "year")))
          " Miguel Moreno —"
          (span (@ (id "source"))
-               ,(anchor "Source" "https://sr.ht/~mmoreno/mmoreno.eu")))))
+               ,(anchor "Source" "https://git.sr.ht/~mmoreno/blog")))))
 
 (define (base-layout site title body)
   `((doctype "html")
