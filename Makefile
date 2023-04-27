@@ -1,9 +1,9 @@
-DOMAIN=mmoreno.eu
+DOMAIN=mianmoreno.com
 .PHONY: publish/vps publish/sourcehut
 
 publish/vps:
 	haunt build
-	rsync -P -rvz --delete site/ cygnus:/srv/http/mmoreno.eu --cvs-exclude
+	rsync -P -rvz --delete site/ cygnus:/srv/http/${DOMAIN} --cvs-exclude
 
 publish/sourcehut:
 	haunt build
