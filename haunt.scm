@@ -240,7 +240,19 @@ describe my personal projects and contributions.")))
     #:tags '("nyxt" "common-lisp" "browser")
     #:involvement 'contributor)))
 
+
+;;
+;; Components
+;;
 
+(define (post-entries site posts)
+  `(ul
+    ,@(map (lambda (post)
+             `(a (@ (class "post")
+                    (href ,(post-uri site post)))
+                 (span (@ (class title)) ,(post-ref post 'title))
+                 (span (@ (class "date")) ,(date->string* (post-date post)))))
+           posts)))
 
 (define* (stylesheet name #:key local?)
   `(link (@ (rel "stylesheet")
@@ -254,27 +266,47 @@ describe my personal projects and contributions.")))
 
 (define navbar
   `(header
-    (div (@ (id "logo")))
     (input (@ (class "mobile-menu") (type "checkbox") (id "mobile-menu")))
-    (label (@ (class "hamburger") (for "mobile-menu"))
-           (span (@ (class "hamburger-icon"))))
+    (div
+     (div (@ (id "logo")) ,(anchor %fullname "/"))
+     (label (@ (class "hamburger") (for "mobile-menu"))
+            (span (@ (class "hamburger-icon")))))
     (nav
      (ul
       ,@(map (lambda (a)
                `(li ,(anchor (car a) (cdr a))))
              '(("Home" . "/")
-               ("Projects" . "/projects.html")
+               ("Projects" . "/projects")
                ("Blog" . "/posts")
                ("Contact" . "/contact.html")))))))
 
 (define footer
   `(footer
     (div (@ (class "container"))
+         ,(anchor '(i (@ (class "fa-solid fa-envelope")))
+                  (string-append "mailto:" %email)
+                  #:external? #t)
+         ,(anchor '(i (@ (class "fa-brands fa-linkedin")))
+                  "https://linkedin.com/in/mianmoreno"
+                  #:external? #t)
+         ,(anchor '(i (@ (class "fa-brands fa-git-alt")))
+                  (string-append "https://git." %domain)
+                  #:external? #t)
+         ,(anchor '(i (@ (class "fa-regular fa-circle")))
+                  "https://sr.ht/~mmoreno"
+                  #:external? #t)
+         ,(anchor '(i (@ (class "fa-brands fa-github")))
+                  "https://github.com/mianmoreno"
+                  #:external? #t)
+         ,(anchor '(i (@ (class "fa-brands fa-gitlab")))
+                  "https://gitlab.com/mianmoreno"
+                  #:external? #t))
+    (div (@ (class "container"))
          "© "
          (span (@ (id "year")))
-         " Miguel Moreno —"
+         ,(format #f " ~a —" %fullname)
          (span (@ (id "source"))
-               ,(anchor "Source" "https://git.sr.ht/~mmoreno/blog")))))
+               ,(anchor "Source" (format #f "https://git.~a/blog" %domain))))))
 
 (define (base-layout site title body)
   `((doctype "html")
