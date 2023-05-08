@@ -1,9 +1,9 @@
-(use-modules (haunt asset)
+(use-modules (haunt artifact)
+             (haunt asset)
              (haunt builder blog)
              (haunt builder atom)
              (haunt builder assets)
              (haunt html)
-             (haunt page)
              (haunt post)
              (haunt reader)
              (haunt site)
@@ -11,9 +11,9 @@
 
 (define (static-page title filename body)
   (lambda (site posts)
-    (make-page filename
-               (with-layout mmoreno-haunt-theme site title body)
-               sxml->html)))
+    (serialized-artifact filename
+                         (with-layout %blog-theme site title body)
+                         sxml->html)))
 
 (define* (anchor label url #:key external?)
   `(a (@ (href ,url)
