@@ -409,8 +409,6 @@ describe my personal projects and contributions.")))
                    #:project-template project-template
                    #:collection-template portfolio-template))
 
-(site #:title "Miguel Moreno"
-      #:domain "mmoreno.eu"
 
 ;;
 ;; Pages
@@ -470,15 +468,23 @@ Computer Science graduate from the University of Kent.")
           (h1 "404")
           (h1 "Not Found")))))
 
+(site #:title %fullname
+      #:domain %domain
       #:default-metadata
-      '((author . "Miguel Moreno")
-        (email . "mmoreno@mmoreno.eu"))
+      `((author . ,%fullname)
+        (email . ,%email))
       #:readers (list html-reader)
       #:builders (list index-page
+                       (portfolio #:prefix "/projects"
+                                  #:theme %portfolio-theme
+                                  #:projects %projects
+                                  #:filter projects/filter-authored
+                                  #:collections %portfolio-collections)
                        (blog #:prefix "/posts"
-                             #:theme mmoreno-haunt-theme
-                             #:collections %collections)
-                       projects-page
+                             #:theme %blog-theme
+                             #:collections %blog-collections)
                        contact-page
+                       not-found-page
                        (atom-feed)
+                       (atom-feeds-by-tag)
                        (static-directory "assets")))
