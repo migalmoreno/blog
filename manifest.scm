@@ -1,3 +1,5 @@
 (specifications->manifest
  '("haunt"
-   "hut"))
+   "hut"
+   "guile"
+   "guile-syntax-highlight"))
