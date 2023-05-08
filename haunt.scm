@@ -285,20 +285,24 @@ describe my personal projects and contributions.")))
            ,footer)
       ,(script "main")))))
 
-(define (post-template post)
-  `((h1 (@ (class "title")) ,(post-ref post 'title))
-    (span (@ (class "text-italic")) " on " ,(date->string* (post-date post)))
-    (div (@ (id "post-container")) ,(post-sxml post))))
+
+;;
+;; Templates/themes
+;;
 
-(define (collection-template site title posts prefix)
-  `((div (@ (class "container"))
-         (h1 (@ (class "title")) "Blog")
-         (ul
-          ,@(map (lambda (post)
-                   `(li ,(anchor (post-ref post 'title) (post-uri site post))
-                        ,(string-append
-                          " on " (date->string* (post-date post)))))
-                 (posts/reverse-chronological posts))))))
+(define (post-template post)
+  `((button (@ (class "back"))
+            (i (@ (class "fa-solid fa-caret-left")))
+            (a (@ (href "/posts")) "Back to posts"))
+    (h1 (@ (class "title")) ,(post-ref post 'title))
+    (span (@ (class "text-italic")) " on " ,(date->string* (post-date post)))
+    (ul (@ (class "tags"))
+        ,@(map (lambda (tag)
+                 `(li (a (@ (href ,(string-append "/feeds/tags/" tag ".xml")))
+                         ,tag)))
+               (assq-ref (post-metadata post) 'tags)))
+    (div (@ (class "post-container")) ,(post-sxml post))))
+
 (define (project-template project)
   `((button (@ (class "back"))
             (i (@ (class "fa-solid fa-caret-left")))
@@ -317,7 +321,11 @@ describe my personal projects and contributions.")))
                  `(li ,tag)) (project-tags project)))
     ,@(project-description project)))
 
-(define %collections
+(define (blog-template site title posts prefix)
+  `((div (@ (class "blog"))
+         (h1 (@ (class "title")) ,title)
+         ,(post-entries site (posts/reverse-chronological posts)))))
+
 (define (portfolio-template site title projects prefix)
   (define (project-uri project)
     (if (equal? (project-involvement project) 'author)
@@ -343,16 +351,18 @@ describe my personal projects and contributions.")))
                       (p ,(project-synopsis project))))
                 projects))))
 
+(define %blog-collections
   `(("Blog" "index.html" ,posts/reverse-chronological)))
 
-(define mmoreno-haunt-theme
-  (theme #:name "mmoreno"
 (define %portfolio-collections
   `(("Projects" "index.html")))
 
+(define %blog-theme
+  (theme #:name %username
          #:layout base-layout
          #:post-template post-template
-         #:collection-template collection-template))
+         #:collection-template blog-template))
+
 (define %portfolio-theme
   (portfolio-theme #:name %username
                    #:layout base-layout
