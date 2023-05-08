@@ -1,6 +1,12 @@
 DOMAIN=mianmoreno.com
 .PHONY: publish/vps publish/sourcehut
 
+build:
+	haunt build
+
+serve:
+	haunt serve --watch
+
 publish/vps:
 	haunt build
 	rsync -P -rvz --delete site/ cygnus:/srv/http/${DOMAIN} --cvs-exclude
