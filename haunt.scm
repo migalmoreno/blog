@@ -7,7 +7,7 @@
              (haunt post)
              (haunt reader)
              (haunt site)
-             (srfi srfi-19))
+             (portfolio))
 
 (define (static-page title filename body)
   (lambda (site posts)
