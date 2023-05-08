@@ -1,20 +1,30 @@
 @media (prefers-color-scheme: light) {
   :root {
     --bg: white;
+    --bg-dim: #f0f0f0;
     --on-bg: #555;
+    --on-bg-dim: #595959;
+    --border: #9f9f9f;
     --secondary: #f3f4f6;
     --on-secondary: #555;
     --accent: #075985;
+    --maroon: #731c52;
+    --slate: #2f3f83;
   }
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #18181b;
+    --bg-dim: #1e1e1e;
     --on-bg: #efefef;
+    --on-bg-dim: #989898;
+    --border: #646464;
     --secondary: #27272a;
     --on-secondary: #52525b;
     --accent: #a5b4fc;
+    --maroon: #cf7fa7;
+    --slate: #76afbf;
   }
 }
 
@@ -37,11 +47,21 @@ p {
   padding: 10px 0;
 }
 
+p a:hover {
+  text-decoration: underline;
+}
+
 a {
   text-decoration: none;
 }
 
-main a {
+main {
+  flex: auto;
+  padding: 20px;
+  position: relative;
+}
+
+main a, footer a {
   color: var(--accent);
 }
 
@@ -61,12 +81,12 @@ main dl div dt {
 main dl div dd {
   padding-left: 30px;
 }
-main dl.bulleted dt::before, main ul li::before {
+main dl.bulleted dt::before, main ul.bulleted li::before {
   content: "\2022";
-  font-size: 15px;
-  vertical-align: middle;
-  padding: 0 5px;
-  line-height: 1.7;
+  font-size: 20px;
+  padding: 10px 10px 0 0;
+  line-height: 1;
+  box-sizing: border-box;
   color: var(--accent);
 }
 
@@ -74,29 +94,38 @@ main dl a, main ul a {
   font-weight: bold;
 }
 
-#post-container {
+.post-container {
   padding: 20px 0;
 }
 
 header {
-  height: 80px;
-  border-bottom: 1px solid var(--secondary);
+  height: 120px;
   box-sizing: border-box;
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header > div {
+  padding: 20px;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  align-items: center;
 }
 
 #logo {
   display: flex;
   align-items: center;
-  margin: 0 30px;
 }
 
 #logo a {
   text-decoration: none;
   color: var(--on-bg);
-  font-size: 1.5rem;
+  font-weight: 600;
 }
 
 nav {
@@ -106,6 +135,7 @@ nav {
   background: var(--bg);
   overflow: hidden;
   transition: max-height .2s ease-out;
+  z-index: 999;
 }
 
 nav ul {
@@ -117,21 +147,31 @@ nav ul {
   justify-content: center;
 }
 
-nav ul li {
+nav li {
   padding: 20px;
-  text-decoration: none;
 }
 
-nav ul li a {
+nav a {
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 500;
+  color: var(--on-bg-dim);
+  border-bottom: 2px solid transparent;
+  padding: 5px 0;
+}
+
+nav a.current, nav a.current:hover {
   color: var(--on-bg);
+  border-color: var(--accent);
+}
+
+nav a:hover {
+  color: var(--on-bg);
+  border-color: var(--on-bg);
 }
 
 .hamburger {
   cursor: pointer;
   float: right;
-  padding: 40px 20px;
   display: none;
 }
 
@@ -169,39 +209,48 @@ nav ul li a {
   max-height: calc(100vh - 80px);
 }
 
-.mobile-menu:checked ~ .hamburger .hamburger-icon {
+.mobile-menu:checked ~ div .hamburger .hamburger-icon {
   background: transparent;
 }
 
-.mobile-menu:checked ~ .hamburger .hamburger-icon::before {
+.mobile-menu:checked ~ div .hamburger .hamburger-icon::before {
   transform: rotate(-45deg);
   top: 0;
 }
 
-.mobile-menu:checked ~ .hamburger .hamburger-icon::after {
+.mobile-menu:checked ~ div .hamburger .hamburger-icon::after {
   transform: rotate(45deg);
   top: 0;
 }
 
 body > .container {
-  min-height: calc(100vh - 80px);
+  min-height: calc(100vh - 120px);
+  height: auto;
+  max-height: auto;
   display: flex;
+  justify-content: center;
   flex-direction: column;
-}
-
-main {
-  flex: auto;
-  padding: 20px;
-  margin: 0 6rem;
+  align-items: center;
 }
 
 footer {
-  border-top: 1px solid var(--secondary);
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 80px;
+  text-align: center;
+  padding: 10px;
   box-sizing: border-box;
+}
+
+footer .container {
+  width: 100%;
+  padding: 10px 0;
+}
+
+footer .container i {
+  padding: 0 10px;
+  font-size: 1.2rem;
 }
 
 #source {
@@ -225,20 +274,283 @@ footer {
   font-style: italic;
 }
 
-@media screen and (max-width: 1024px) {
-  main {
-    margin: 0;
+.text-faint {
+  color: var(--on-bg-dim);
+}
+
+i {
+  padding-right: 10px;
+}
+
+main p code {
+  background: var(--secondary);
+  color: var(--accent);
+  border-radius: 5px;
+}
+
+pre {
+  background: var(--bg-dim);
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 5px;
+  white-space: pre-wrap;
+  min-width: 100%;
+  max-width: 100%;
+  display: inline-block;
+  overflow-x: scroll;
+}
+
+.metadata {
+  padding: 10px 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.metadata span {
+  text-align: center;
+  white-space: nowrap;
+  padding: 2px 20px 2px 0;
+}
+
+.syntax-special, .syntax-element {
+    color: #8ac6f2;
+    font-weight: bold;
+}
+
+.syntax-string {
+  color: var(--slate);
+}
+
+.syntax-keyword, .syntax-attribute {
+  color: var(--maroon);
+}
+
+.syntax-comment {
+    color: #999;
+}
+
+.syntax-open, .syntax-close {
+    color: #999;
+}
+
+figure{
+  margin: 30px 10px;
+  border-radius: 5px;
+}
+
+figure img {
+  border-radius: 5px;
+}
+
+figcaption {
+  font-style: italic;
+  text-align: center;
+  padding: 5px 0;
+  color: var(--on-bg-dim);
+}
+
+button.back {
+  background: none;
+  border: none;
+  font-family: "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 1rem;
+  margin: 20px 0;
+  color: var(--on-bg-dim);
+}
+
+button.back a {
+  color: var(--on-bg-dim);
+}
+
+#portfolio {
+  padding: 20px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.project {
+  border: 1px solid var(--on-secondary);
+  display: block;
+  background: var(--secondary);
+  border-radius: 5px;
+  flex: 0 auto;
+  padding: 15px;
+  width: 320px;
+  max-width: 320px;
+  min-width: 250px;
+  min-height: 230px;
+  max-height: 230px;
+  box-sizing: border-box;
+  margin: 15px;
+}
+
+.project h1 {
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+
+.project:hover h1 {
+  text-decoration: underline;
+}
+
+.project h4 {
+  font-weight: normal;
+  font-size: 1rem;
+}
+
+.project p {
+  color: var(--on-bg);
+  font-size: 1rem;
+}
+
+.tags {
+  display: flex;
+}
+
+.tags li {
+  list-style: none;
+  background: var(--secondary);
+  border-radius: 12px;
+  border: 1px solid var(--accent);
+  padding: 5px 10px;
+  margin: 2px 5px 2px 0;
+  font-weight: bold;
+  font-size: 0.8rem;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.blog.preview {
+  padding: 40px 0 20px 0;
+}
+
+.blog h2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.post {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--secondary);
+  color: var(--on-bg);
+  font-weight: 500;
+  font-size: 1.3rem;
+  text-decoration: none;
+}
+
+.post:last-of-type {
+  border-bottom: none;
+}
+
+.post:hover {
+  text-decoration: none;
+}
+
+.post:hover .title {
+  text-decoration: underline;
+}
+
+.blog button {
+  text-decoration: none;
+  background: var(--secondary);
+  font-family: "Helvetica Neue";
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 10px 15px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  color: var(--on-bg);
+}
+
+.blog button:hover {
+  border: 1px solid var(--border);
+  cursor: pointer;
+}
+
+.blog button a:hover {
+  text-decoration: none;
+}
+
+.date {
+  color: var(--accent);
+  font-family: monospace;
+  font-size: 1rem;
+}
+
+#not-found {
+  height: 100%;
+  position: absolute;
+  display: flex;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+
+@media screen and (min-width: 1200px) {
+  main, header {
+    margin: 0 auto;
+    min-width: 70rem;
+    max-width: 70rem;
   }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (min-width: 800px) and (max-width: 1200px) {
+  main, header {
+    margin: 0;
+    min-width: 100%;
+    max-width: 100%;
+  }
+}
+
+@media screen and (max-width: 800px) {
   body {
     font-size: 15px;
-    margin: 0 10px;
+    margin: 0;
+  }
+
+  body > .container {
+    min-height: calc(100vh - 80px);
+  }
+
+  header {
+    height: 80px;
+  }
+
+  main, header {
+    margin: 0;
+    min-width: 100%;
+    max-width: 100%;
+  }
+
+  main {
+    padding: 0 20px;
+  }
+
+  header > div {
+    width: 100%;
   }
 
   .hamburger {
     display: block;
+  }
+
+  .project {
+    min-width: 250px;
+    max-width: 250px;
+  }
+
+  .tags li {
+    font-size: 0.6rem;
   }
 
   nav {
@@ -255,5 +567,23 @@ footer {
 
   nav ul li {
     font-size: 18px;
+  }
+
+  button.back {
+    font-size: 15px;
+  }
+
+  .post {
+    font-size: 1rem;
+  }
+
+  .date {
+    font-size: .9rem;
+  }
+}
+
+@media screen and (max-width: 468px) {
+  .date {
+    display: none;
   }
 }
