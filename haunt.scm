@@ -48,25 +48,6 @@
 (define (post-uri site post)
   (string-append "/posts/" (site-post-slug site post) ".html"))
 
-(define index-page
-  (static-page
-   "Home"
-   "index.html"
-   `((div (@ (id "about"))
-          (h1 (@ (class "title")) "Hi! Welcome to my site")
-          (p ,(string-join
-               (list
-                "I'm Miguel Moreno, a software engineer based in Spain"
-                "and a recent BSc. Computer Science graduate.")))
-          (p "My interests currently revolve around the topics below.")
-          (ul
-           (li "Functional programming")
-           (li "LISP")
-           (li "Web development")
-           (li "Operating systems")
-           (li "Introspectable and extensible tooling")
-           (li "Digital privacy")
-           (li "Free and open source software"))))))
 
 (define (project-item label link involvement description)
   `(div
@@ -75,75 +56,7 @@
               ,(string-append " (" involvement ")")))
     (dd ,description)))
 
-(define projects-page
-  (static-page
-   "Projects"
-   "/projects.html"
-   `((h1 (@ (class "title")) "Projects")
-     (p "Below are some of the open source projects I've worked in.")
-     (dl (@ (class "bulleted"))
-         ,(project-item
-           "Tubo" "https://sr.ht/~mmoreno/tubo" "Author"
-           "An alternative web front-end for various streaming sites")
-         ,(project-item
-           "nx-router" "https://sr.ht/~mmoreno/nx-router" "Author"
-           "A general-purpose routing extension for the Nyxt browser")
-         ,(project-item
-           "nx-tailor" "https://sr.ht/~mmoreno/nx-tailor" "Author"
-           "A theme manager for the Nyxt browser")
-         ,(project-item
-           "fdroid.el" "https://sr.ht/~mmoreno/fdroid.el" "Author"
-           "An Emacs interface to the F-Droid package repository")
-         ,(project-item
-           "nyxt.el" "https://sr.ht/~mmoreno/nyxt.el" "Author"
-           "A minimal API to interact with the Nyxt browser from Emacs")
-         ,(project-item
-           "dotfiles" "https://sr.ht/~mmoreno/dotfiles" "Author"
-           "My personal configuration based on top of RDE and GNU Guix")
-         ,(project-item
-           "GNU Guix" "https://guix.gnu.org" "Contributor"
-           "A functional and declarative package manager")
-         ,(project-item
-           "RDE" "https://sr.ht/~abcdw/rde" "Co-maintainer"
-           "A configuration framework on top of GNU Guix")
-         ,(project-item
-           "mpv.el" "https://github.com/kljohann/mpv.el" "Contributor"
-           "Emacs helpers to interact with MPV via its IPC interface")
-         ,(project-item
-           "Nyxt" "https://github.com/atlas-engineer/nyxt" "Contributor"
-           "An infinitely extensible power browser")
-         ,(project-item
-           "pulseaudio-control"
-           "https://git.sr.ht/~flexibeast/pulseaudio-control" "Co-maintainer"
-           "Emacs helpers to interact with the PulseAudio daemon")
-         ,(project-item
-           "nx-search-engines"
-           "https://github.com/aartaka/nx-search-engines" "Contributor"
-           "Collection of easy-to-setup search engines for Nyxt")))))
 
-(define contact-page
-  (static-page
-   "Contact"
-   "/contact.html"
-   `((h1 (@ (class "title")) "Contact me")
-     (dl
-      (div
-       (dt (@ (class "text-bold text-italic")) "Sourcehut")
-       (dd ,(anchor  "~mmoreno" "https://sr.ht/~mmoreno" #:external? #t)))
-      (div
-       (dt (@ (class "text-bold text-italic")) "Email")
-       (dd (code "mmoreno") " at " (code "$DOMAIN")))
-      (div
-       (dt (@ (class "text-bold text-italic")) "PGP")
-       (dd ,(anchor "4956 DAC8 B077 15EA 9F14  E13A EF1F 69BF 5F23 F458"
-                    "assets/pubkey.asc")))
-      (div
-       (dt (@ (class "text-bold text-italic")) "IRC")
-       (dd (code "ardon") " on " ,(anchor "Libera.chat" "https://libera.chat"))
-       (dd (code "nvsop") " on " ,(anchor "OFTC.net" "https://www.oftc.net")))
-      (div
-       (dt (@ (class "text-bold text-italic")) "Matrix")
-       (dd (code "@sloan:$DOMAIN")))))))
 
 (define* (stylesheet name #:key local?)
   `(link (@ (rel "stylesheet")
@@ -222,6 +135,65 @@
 
 (site #:title "Miguel Moreno"
       #:domain "mmoreno.eu"
+
+;;
+;; Pages
+;;
+
+(define index-page
+  (lambda (site posts)
+    (list
+     (serialized-artifact
+      "index.html"
+      (with-layout
+       %blog-theme site "Home"
+       `((div (@ (id "about"))
+              (h1 (@ (class "title")) "Hi, I'm Miguel Ángel!")
+              (p "I'm a software engineer based in Barcelona and a recent
+Computer Science graduate from the University of Kent.")
+              (p "My interests currently revolve around these topics:")
+              (ul (@ (class "bulleted"))
+                  (li "Functional programming")
+                  (li "LISP")
+                  (li "Web development")
+                  (li "Operating systems")
+                  (li "Introspectable and extensible tooling")
+                  (li "Digital privacy")
+                  (li "Free and open source software")))
+         (div (@ (class "blog preview"))
+              (h2 "Latest Posts" ,(anchor '(button "See all") "/posts"))
+              ,(post-entries site posts))))
+      sxml->html))))
+
+(define contact-page
+  (static-page
+   "Contact"
+   "/contact.html"
+   `((h1 (@ (class "title")) "Contact me")
+     (dl
+      (div
+       (dt (@ (class "text-bold text-italic")) "Email")
+       (dd (code "me") " at " (code "$DOMAIN")))
+      (div
+       (dt (@ (class "text-bold text-italic")) "PGP")
+       (dd ,(anchor "4956 DAC8 B077 15EA 9F14  E13A EF1F 69BF 5F23 F458"
+                    "assets/pubkey.asc")))
+      (div
+       (dt (@ (class "text-bold text-italic")) "IRC")
+       (dd (code "ardon") " on " ,(anchor "Libera.chat" "https://libera.chat"))
+       (dd (code "nvsop") " on " ,(anchor "OFTC.net" "https://www.oftc.net")))
+      (div
+       (dt (@ (class "text-bold text-italic")) "Matrix")
+       (dd (code "@sloan:conses.eu")))))))
+
+(define not-found-page
+  (static-page
+   "404 Not found"
+   "/404.html"
+   `((div (@ (id "not-found"))
+          (h1 "404")
+          (h1 "Not Found")))))
+
       #:default-metadata
       '((author . "Miguel Moreno")
         (email . "mmoreno@mmoreno.eu"))
