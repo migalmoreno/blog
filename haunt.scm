@@ -7,7 +7,29 @@
              (haunt post)
              (haunt reader)
              (haunt site)
+             (ice-9 match)
+             (srfi srfi-19)
+             (syntax-highlight)
+             (syntax-highlight lisp)
+             (syntax-highlight scheme)
+             (syntax-highlight xml)
              (portfolio))
+
+
+;;
+;; Utilities
+;;
+
+(define* (highlight-code code #:key (lang 'scheme))
+  (let ((lexer (match lang
+                 ('scheme lex-scheme)
+                 ('lisp lex-lisp)
+                 ('xml lex-xml)
+                 ('c lex-c)
+                 (_ #f))))
+    (if lexer
+        `(pre (code ,(highlights->sxml (highlight lexer code))))
+        code)))
 
 (define (static-page title filename body)
   (lambda (site posts)
