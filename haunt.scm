@@ -48,7 +48,15 @@
 (define (post-uri site post)
   (string-append "/posts/" (site-post-slug site post) ".html"))
 
+
+;;
+;; Defaults
+;;
 
+(define %domain "mianmoreno.com")
+(define %email "me@mianmoreno.com")
+(define %username "mianmoreno")
+(define %fullname "Miguel Ángel Moreno")
 (define %projects
   (list
    (project
