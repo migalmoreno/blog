@@ -61,7 +61,7 @@
   (list
    (project
     #:name "tubo"
-    #:synopsis "An alternative web front-end for various streaming sites"
+    #:synopsis "An alternative web front-end to various streaming sites"
     #:link "https://git.mianmoreno.com/tubo"
     #:tags '("clojure" "clojurescript" "privacy")
     #:license "GPL-3.0+"
