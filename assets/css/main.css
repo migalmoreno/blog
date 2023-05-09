@@ -533,7 +533,7 @@ button.back a {
   }
 
   main {
-    padding: 0 20px;
+    padding-top: 0;
   }
 
   header > div {
