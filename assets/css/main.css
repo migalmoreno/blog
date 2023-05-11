@@ -117,12 +117,8 @@ header > div {
   align-items: center;
 }
 
-#logo {
-  display: flex;
-  align-items: center;
-}
-
 #logo a {
+  white-space: nowrap;
   text-decoration: none;
   color: var(--on-bg);
   font-weight: 600;
@@ -130,6 +126,7 @@ header > div {
 
 nav {
   display: flex;
+  justify-content: flex-end;
   align-items: center;
   max-height: none;
   background: var(--bg);
