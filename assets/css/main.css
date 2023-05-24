@@ -374,11 +374,11 @@ button.back a {
   border-radius: 5px;
   flex: 0 auto;
   padding: 15px;
-  width: 320px;
-  max-width: 320px;
-  min-width: 250px;
-  min-height: 230px;
-  max-height: 230px;
+  width: 300px;
+  max-width: 300px;
+  min-width: 300px;
+  min-height: 200px;
+  max-height: 200px;
   box-sizing: border-box;
   margin: 15px;
 }
@@ -582,5 +582,10 @@ button.back a {
 @media screen and (max-width: 468px) {
   .date {
     display: none;
+  }
+
+  .project {
+    min-width: 100%;
+    max-width: 100%;
   }
 }
