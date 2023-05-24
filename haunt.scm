@@ -65,7 +65,6 @@
     #:link "https://git.mianmoreno.com/tubo"
     #:tags '("clojure" "clojurescript" "privacy")
     #:license "GPL-3.0+"
-    #:involvement 'author
     #:description
     `((p "Tubo is an alternative web frontend to some of the most popular
 streaming sites, including:")
@@ -99,7 +98,6 @@ downloads, offline mode, and more.")
     #:link "https://git.mianmoreno.com/nx-router"
     #:tags '("common-lisp" "nyxt" "browser")
     #:license "BSD 3-Clause"
-    #:involvement 'author
     #:description
     `((p "nx-router is a full-fledged URL routing extension for the "
          ,(anchor "Nyxt" "https://nyxt.atlas.engineer") " browser.")
@@ -129,7 +127,6 @@ with unmaintained instances of privacy frontends.")
     #:link "https://git.mianmoreno.com/nx-tailor"
     #:tags '("common-lisp" "nyxt" "browser")
     #:license  "BSD 3-Clause"
-    #:involvement 'author
     #:description
     `((p "nx-tailor is a theme manager for the "
          ,(anchor "Nyxt" "https://nyxt.atlas.engineer") " browser. It leverages
@@ -149,7 +146,6 @@ depending on the time of the day.")
     #:link "https://git.mianmoreno.com/fdroid.el"
     #:tags '("emacs" "emacs-lisp" "fdroid")
     #:license "GPL-3.0+"
-    #:involvement 'author
     #:description
     `((p "fdroid.el is a simple completion-based interface to work with
 F-Droid packages from Emacs.")
@@ -163,7 +159,6 @@ having to download APKs manually.")))
     #:link "https://git.mianmoreno.com/nyxt.el"
     #:tags '("emacs" "emacs-lisp" "nyxt")
     #:license "GPL-3.0+"
-    #:involvement 'author
     #:description
     `((p "nyxt.el is a minimal API to interact with Nyxt from Emacs.")
       (p "It contains a useful helper " (code "nyxt-run") " to run a Nyxt
@@ -175,7 +170,6 @@ Emacs X Window Manager (EXWM).")))
     #:link "https://git.mianmoreno.com/dotfiles"
     #:tags '("guix" "rde" "dotfiles")
     #:license "GPL-3.0+"
-    #:involvement 'author
     #:description
     `((p "My personal set of configuration files crafted on top of Guix and
 RDE. The project is focused on a multi-user setup, with a development build for
@@ -190,7 +184,6 @@ packages, services, and features upstream as much as I can.")))
     #:link "https://git.mianmoreno.com/blog"
     #:tags '("scheme" "org-mode" "haunt")
     #:license "GPL-3.0+"
-    #:involvement 'author
     #:description
     `((p "My personal blog built with the "
          ,(anchor "Haunt" "https://dthompson.us/projects/haunt.html")
@@ -202,43 +195,7 @@ files for the blog entries.")
       (p "For the most part, I've followed the Haunt guidelines outlined in its
 manual and use the default utilities, although I've  added a custom "
          (code "portfolio") " builder to make it more convenient to list and
-describe my personal projects and contributions.")))
-   (project
-    #:name "GNU Guix"
-    #:synopsis "A functional and declarative package manager"
-    #:link "https://guix.gnu.org"
-    #:tags '("scheme" "linux" "gnu")
-    #:involvement 'contributor)
-   (project
-    #:name "RDE"
-    #:synopsis "A configuration framework on top of GNU Guix"
-    #:link "https://sr.ht/~abcdw/rde"
-    #:tags '("scheme" "linux" "dotfiles")
-    #:involvement 'co-maintainter)
-   (project
-    #:name "mpv.el"
-    #:synopsis "Emacs helpers to interact with MPV via its IPC interface"
-    #:link "https://github.com/kljohann/mpv.el"
-    #:tags '("emacs" "mpv" "emacs-lisp")
-    #:involvement 'co-maintainer)
-   (project
-    #:name "Nyxt"
-    #:synopsis "An infinitely extensible power browser"
-    #:link "https://github.com/atlas-engineer/nyxt"
-    #:tags '("browser" "common-lisp" "emacs")
-    #:involvement 'contributor)
-   (project
-    #:name "pulseaudio-control"
-    #:synopsis "Emacs helpers to interact with the PulseAudio daemon"
-    #:link "https://sr.ht/~flexibeast/pulseaudio-control"
-    #:tags '("emacs" "emacs-lisp" "pulseaudio")
-    #:involvement 'co-maintainer)
-   (project
-    #:name "nx-search-engines"
-    #:synopsis "A collection of easy-to-setup search engines for Nyxt"
-    #:link "https://github.com/aartaka/nx-search-engines"
-    #:tags '("nyxt" "common-lisp" "browser")
-    #:involvement 'contributor)))
+describe my personal projects and contributions.")))))
 
 
 ;;
@@ -368,23 +325,14 @@ describe my personal projects and contributions.")))
 
 (define (portfolio-template site title projects prefix)
   (define (project-uri project)
-    (if (equal? (project-involvement project) 'author)
-        (string-append (or prefix "") "/" (project-name project) ".html")
-        (project-link project)))
+    (string-append (or prefix "") "/" (project-name project) ".html"))
 
   `((h1 (@ (class "title")) ,title)
     (div (@ (id "portfolio"))
          ,@(map (lambda (project)
                   `(a (@ (href ,(project-uri project))
-                         (class "project")
-                         ,@(if (equal? (project-involvement project)
-                                       'author)
-                               '()
-                               '((rel noopener)
-                                 (target _blank))))
+                         (class "project"))
                       (h1 ,(project-name project))
-                      (h4 (@ (class "text-italic text-faint"))
-                          ,(project-involvement project))
                       (ul (@ (class "tags"))
                           ,@(map (lambda (tag)
                                    `(li ,tag)) (project-tags project)))
@@ -478,7 +426,6 @@ Computer Science graduate from the University of Kent.")
                        (portfolio #:prefix "/projects"
                                   #:theme %portfolio-theme
                                   #:projects %projects
-                                  #:filter projects/filter-authored
                                   #:collections %portfolio-collections)
                        (blog #:prefix "/posts"
                              #:theme %blog-theme
