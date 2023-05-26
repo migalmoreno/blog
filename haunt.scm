@@ -401,10 +401,6 @@ Computer Science graduate from the University of Kent.")
        (dd ,(anchor "4956 DAC8 B077 15EA 9F14  E13A EF1F 69BF 5F23 F458"
                     "assets/pubkey.asc")))
       (div
-       (dt (@ (class "text-bold text-italic")) "IRC")
-       (dd (code "ardon") " on " ,(anchor "Libera.chat" "https://libera.chat"))
-       (dd (code "nvsop") " on " ,(anchor "OFTC.net" "https://www.oftc.net")))
-      (div
        (dt (@ (class "text-bold text-italic")) "Matrix")
        (dd (code "@sloan:conses.eu")))))))
 
