@@ -1,19 +1,17 @@
 function setCopyrightYear() {
-  document.querySelector("#year").innerHTML = new Date().getFullYear()
+  document.querySelector(".footer__year").innerHTML = new Date().getFullYear()
 }
 
 function highlightCurrentRoute() {
   const rx = /\/+$/
-  for (let el of document.querySelectorAll("nav ul a")) {
+  for (let el of document.querySelectorAll(".menu-item__link")) {
     if (el.href.replace(rx, "") === window.location.href.replace(rx, "")) {
-      el.classList.add("current")
+      el.classList.add("menu-item__link--selected")
     }
   }
 }
 
-function init() {
+(function init() {
   setCopyrightYear()
   highlightCurrentRoute()
-}
-
-init()
+})()

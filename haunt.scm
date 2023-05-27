@@ -28,7 +28,9 @@
                  ('c lex-c)
                  (_ #f))))
     (if lexer
-        `(pre (code ,(highlights->sxml (highlight lexer code))))
+        `(pre (@ (class "codeblock"))
+              (code (@ (class "codeblock__code"))
+                    ,(highlights->sxml (highlight lexer code))))
         code)))
 
 (define (static-page title filename body)
@@ -37,8 +39,11 @@
                          (with-layout %blog-theme site title body)
                          sxml->html)))
 
-(define* (anchor label url #:key external?)
+(define* (anchor label url #:key external? class)
   `(a (@ (href ,url)
+         ,@(if class
+               `((class ,class))
+               '())
          ,@(if external?
                '((rel noopener)
                  (target _blank))
@@ -68,12 +73,11 @@
     #:description
     `((p "Tubo is an alternative web frontend to some of the most popular
 streaming sites, including:")
-      (ul (@ (class "bulleted"))
-          (li "YouTube")
-          (li "SoundCloud")
-          (li "media.ccc.de")
-          (li "PeerTube")
-          (li "Bandcamp"))
+      (ul (@ (class "list"))
+          ,@(map (lambda (i)
+                   `(li (@ (class "list-item--type-bulleted")) ,i))
+                 (list "YouTube" "SoundCloud" "media.ccc.de" "PeerTube"
+                       "Bandcamp")))
       (p "It acts like a privacy-friendly proxy that compiles all the content
 from the above sites and presents it to you in a distraction-free interface. It
 gathers the necessary data via "
@@ -90,7 +94,8 @@ downloads, offline mode, and more.")
       (figure
        (img (@ (src "https://files.mianmoreno.com/tubo_channel.jpg")
                (style "width:100%")
-               (alt "Tubo channel page screenshot")))
+               (alt "Tubo channel page screenshot")
+               (class "post__image")))
        (figcaption "Channel page view"))))
    (project
     #:name "nx-router"
@@ -138,7 +143,8 @@ depending on the time of the day.")
        (video (@ (src "https://files.mianmoreno.com/nx_tailor.mp4")
                  (style "width:100%")
                  (autoplay "true")
-                 (controls "true")))
+                 (controls "true")
+                 (class "post__image")))
        (figcaption "Changing the theme via the prompt buffer"))))
    (project
     #:name "fdroid.el"
@@ -203,12 +209,13 @@ describe my personal projects and contributions.")))))
 ;;
 
 (define (post-entries site posts)
-  `(ul
+  `(ul (@ (class "blog__wrapper"))
     ,@(map (lambda (post)
-             `(a (@ (class "post")
+             `(a (@ (class "post-item")
                     (href ,(post-uri site post)))
-                 (span (@ (class title)) ,(post-ref post 'title))
-                 (span (@ (class "date")) ,(date->string* (post-date post)))))
+                 (span (@ (class "post-item__title")) ,(post-ref post 'title))
+                 (span (@ (class "post-item__date"))
+                       ,(date->string* (post-date post)))))
            posts)))
 
 (define* (stylesheet name #:key local?)
@@ -222,48 +229,54 @@ describe my personal projects and contributions.")))))
               (src ,(string-append "/assets/js/" name ".js")))))
 
 (define navbar
-  `(header
-    (input (@ (class "mobile-menu") (type "checkbox") (id "mobile-menu")))
-    (div
-     (div (@ (id "logo")) ,(anchor %fullname "/"))
-     (label (@ (class "hamburger") (for "mobile-menu"))
-            (span (@ (class "hamburger-icon")))))
-    (nav
-     (ul
-      ,@(map (lambda (a)
-               `(li ,(anchor (car a) (cdr a))))
-             '(("Home" . "/")
-               ("Projects" . "/projects")
-               ("Blog" . "/posts")
-               ("Contact" . "/contact.html")))))))
+  `(header (@ (class "navbar"))
+           (input (@ (class "navbar__mobile-menu")
+                     (type "checkbox") (id "mobile-menu")))
+           (div (@ (class "navbar__images"))
+                (div (@ (class "navbar__logo"))
+                     ,(anchor %fullname "/" #:class "navbar__link"))
+                (label (@ (class "navbar__menu-icon") (for "mobile-menu"))
+                       (span (@ (class "menu-icon")))))
+           (nav (@ (class "navbar__nav"))
+                (ul (@ (class "navbar__menu"))
+                    ,@(map (lambda (a)
+                             `(li (@ (class "menu-item"))
+                                  ,(anchor (car a) (cdr a)
+                                           #:class "menu-item__link")))
+                           '(("Home" . "/")
+                             ("Projects" . "/projects")
+                             ("Blog" . "/posts")
+                             ("Contact" . "/contact.html")))))))
 
 (define footer
-  `(footer
-    (div (@ (class "container"))
-         ,(anchor '(i (@ (class "fa-solid fa-envelope")))
-                  (string-append "mailto:" %email)
-                  #:external? #t)
-         ,(anchor '(i (@ (class "fa-brands fa-linkedin")))
-                  "https://linkedin.com/in/mianmoreno"
-                  #:external? #t)
-         ,(anchor '(i (@ (class "fa-brands fa-git-alt")))
-                  (string-append "https://git." %domain)
-                  #:external? #t)
-         ,(anchor '(i (@ (class "fa-regular fa-circle")))
-                  "https://sr.ht/~mmoreno"
-                  #:external? #t)
-         ,(anchor '(i (@ (class "fa-brands fa-github")))
-                  "https://github.com/mianmoreno"
-                  #:external? #t)
-         ,(anchor '(i (@ (class "fa-brands fa-gitlab")))
-                  "https://gitlab.com/mianmoreno"
-                  #:external? #t))
-    (div (@ (class "container"))
+  `(footer (@ (class "footer"))
+           (div (@ (class "footer__wrapper"))
+                ,@(map (lambda (item)
+                         (anchor `(i (@ (class
+                                          ,(string-append (cdr item)
+                                                          " footer__icon"))))
+                                 (car item)
+                                 #:external? #t
+                                 #:class "footer__link"))
+                       (list
+                        (cons (format #f "https://git.~a/blog" %domain)
+                              "fa-solid fa-code")
+                        (cons (string-append "mailto:" %email)
+                              "fa-solid fa-envelope")
+                        (cons "https://linkedin.com/in/mianmoreno"
+                              "fa-brands fa-linkedin")
+                        (cons (string-append "https://git." %domain)
+                              "fa-brands fa-git-alt")
+                        (cons "https://sr.ht/~mmoreno"
+                              "fa-regular fa-circle")
+                        (cons "https://github.com/mianmoreno"
+                              "fa-brands fa-github")
+                        (cons "https://gitlab.com/mianmoreno"
+                              "fa-brands fa-gitlab"))))
+    (div (@ (class "footer__wrapper"))
          "© "
-         (span (@ (id "year")))
-         ,(format #f " ~a —" %fullname)
-         (span (@ (id "source"))
-               ,(anchor "Source" (format #f "https://git.~a/blog" %domain))))))
+         (span (@ (class "footer__year")))
+         ,(format #f " ~a" %fullname))))
 
 (define (base-layout site title body)
   `((doctype "html")
@@ -277,8 +290,8 @@ describe my personal projects and contributions.")))))
       ,(stylesheet "https://use.fontawesome.com/releases/v6.3.0/css/all.css"))
      (body
       ,navbar
-      (div (@ (class "container"))
-           (main ,body)
+      (div (@ (class "body-container"))
+           (main (@ (class "main")) ,body)
            ,footer)
       ,(script "main")))))
 
@@ -288,55 +301,66 @@ describe my personal projects and contributions.")))))
 ;;
 
 (define (post-template post)
-  `((button (@ (class "back"))
-            (i (@ (class "fa-solid fa-caret-left")))
-            (a (@ (href "/posts")) "Back to posts"))
-    (h1 (@ (class "title")) ,(post-ref post 'title))
-    (span (@ (class "text-italic")) " on " ,(date->string* (post-date post)))
-    (ul (@ (class "tags"))
-        ,@(map (lambda (tag)
-                 `(li (a (@ (href ,(string-append "/feeds/tags/" tag ".xml")))
-                         ,tag)))
-               (assq-ref (post-metadata post) 'tags)))
+  `((div (@ (class "post__metadata"))
+         (button (@ (class "button button--type-bare"))
+                 (i (@ (class "fa-solid fa-caret-left button__icon")))
+                 (a (@ (href "/posts") (class "button__label")) "Back to posts"))
+         (h1 (@ (class "main__title")) ,(post-ref post 'title))
+         (span (@ (class "post__subtitle")) " on "
+               ,(date->string* (post-date post)))
+         (ul (@ (class "tags"))
+             ,@(map (lambda (tag)
+                      `(li (@ (class "tag"))
+                           (a (@ (href
+                                  ,(string-append "/feeds/tags/" tag ".xml")))
+                              ,tag)))
+                    (assq-ref (post-metadata post) 'tags))))
     (div (@ (class "post-container")) ,(post-sxml post))))
 
 (define (project-template project)
-  `((button (@ (class "back"))
-            (i (@ (class "fa-solid fa-caret-left")))
-            (a (@ (href "/projects")) "Back to projects"))
-    (h1 ,(project-name project))
-    (h4 (@ (class "text-italic text-faint")) ,(project-synopsis project))
-    (div (@ (class "metadata"))
-         (span (i (@ (class "fa-brands fa-git-alt")))
-               ,(anchor (project-link project)
-                        (string-append (project-link project) "/about")
-                        #:external? #t))
-         (span (i (@ (class "fa-solid fa-file-lines")))
-               ,(project-license project)))
-    (ul (@ (class "tags"))
-        ,@(map (lambda (tag)
-                 `(li ,tag)) (project-tags project)))
-    ,@(project-description project)))
+  `((div (@ (class "project"))
+         (button (@ (class "button--type-bare"))
+                 (i (@ (class "fa-solid fa-caret-left button__icon")))
+                 (a (@ (href "/projects") (class "button__label"))
+                    "Back to projects"))
+         (h1 ,(project-name project))
+         (h4 (@ (class "project__subtitle")) ,(project-synopsis project))
+         (div (@ (class "project__metadata"))
+              (span (@ (class "project__metadata-items"))
+                    (i (@ (class "fa-brands fa-git-alt project__icon")))
+                    ,(anchor (project-link project)
+                             (string-append (project-link project) "/about")
+                             #:external? #t))
+              (span (@ (classs "project__metadata-items"))
+                    (i (@ (class "fa-solid fa-file-lines project__icon")))
+                    ,(project-license project)))
+         (ul (@ (class "tags"))
+             ,@(map (lambda (tag)
+                      `(li (@ (class "tag")) ,tag)) (project-tags project)))
+         ,@(project-description project))))
 
 (define (blog-template site title posts prefix)
   `((div (@ (class "blog"))
-         (h1 (@ (class "title")) ,title)
+         (h1 (@ (class "main__title")) ,title)
          ,(post-entries site (posts/reverse-chronological posts)))))
 
 (define (portfolio-template site title projects prefix)
   (define (project-uri project)
     (string-append (or prefix "") "/" (project-name project) ".html"))
 
-  `((h1 (@ (class "title")) ,title)
-    (div (@ (id "portfolio"))
+  `((h1 (@ (class "portfolio__title")) ,title)
+    (div (@ (class "portfolio"))
          ,@(map (lambda (project)
                   `(a (@ (href ,(project-uri project))
-                         (class "project"))
-                      (h1 ,(project-name project))
+                         (class "project-item"))
+                      (h1 (@ (class "project-item__title"))
+                          ,(project-name project))
                       (ul (@ (class "tags"))
                           ,@(map (lambda (tag)
-                                   `(li ,tag)) (project-tags project)))
-                      (p ,(project-synopsis project))))
+                                   `(li (@ (class "tag")) ,tag))
+                                 (project-tags project)))
+                      (p (@ (class "project-item__synopsis"))
+                         ,(project-synopsis project))))
                 projects))))
 
 (define %blog-collections
@@ -369,21 +393,23 @@ describe my personal projects and contributions.")))))
       "index.html"
       (with-layout
        %blog-theme site "Home"
-       `((div (@ (id "about"))
-              (h1 (@ (class "title")) "Hi, I'm Miguel Ángel!")
+       `((div (@ (class "hero"))
+              (h1 (@ (class "hero__title")) "Hi, I'm Miguel Ángel!")
               (p "I'm a software engineer based in Barcelona and a recent
 Computer Science graduate from the University of Kent.")
               (p "My interests currently revolve around these topics:")
-              (ul (@ (class "bulleted"))
-                  (li "Functional programming")
-                  (li "LISP")
-                  (li "Web development")
-                  (li "Operating systems")
-                  (li "Introspectable and extensible tooling")
-                  (li "Digital privacy")
-                  (li "Free and open source software")))
-         (div (@ (class "blog preview"))
-              (h2 "Latest Posts" ,(anchor '(button "See all") "/posts"))
+              (ul (@ (class "list"))
+                  ,@(map (lambda (i)
+                           `(li (@ (class "list-item--type-bulleted")) ,i))
+                         (list "Functional programming" "LISP" "Web development"
+                               "Operating systems"
+                               "Introspectable and extensible tooling"
+                               "Digital privacy"
+                               "Free and open source software"))))
+         (div (@ (class "blog blog--type-preview"))
+              (h2 (@ (class "blog__title")) "Latest Posts"
+                  ,(anchor '(button (@ (class "button button--type-border"))
+                                    "See all") "/posts"))
               ,(post-entries site posts))))
       sxml->html))))
 
@@ -391,24 +417,26 @@ Computer Science graduate from the University of Kent.")
   (static-page
    "Contact"
    "/contact.html"
-   `((h1 (@ (class "title")) "Contact me")
-     (dl
-      (div
-       (dt (@ (class "text-bold text-italic")) "Email")
-       (dd (code "me") " at " (code "$DOMAIN")))
-      (div
-       (dt (@ (class "text-bold text-italic")) "PGP")
-       (dd ,(anchor "4956 DAC8 B077 15EA 9F14  E13A EF1F 69BF 5F23 F458"
+   `((h1 (@ (class "main__title")) "Contact me")
+     (dl (@ (class "list"))
+      (div (@ (class "descriptions__wrapper"))
+       (dt (@ (class "descriptions__title")) "Email")
+       (dd (@ (class "descriptions__text"))
+           (code "me") " at " (code "$DOMAIN")))
+      (div (@ (class "descriptions__wrapper"))
+       (dt (@ (class "descriptions__title")) "PGP")
+       (dd (@ (class "descriptions__text"))
+           ,(anchor "4956 DAC8 B077 15EA 9F14  E13A EF1F 69BF 5F23 F458"
                     "assets/pubkey.asc")))
-      (div
-       (dt (@ (class "text-bold text-italic")) "Matrix")
-       (dd (code "@sloan:conses.eu")))))))
+      (div (@ (class "descriptions__wrapper"))
+       (dt (@ (class "descriptions__title")) "Matrix")
+       (dd (@ (class "descriptions__text")) (code "@sloan:conses.eu")))))))
 
 (define not-found-page
   (static-page
    "404 Not found"
    "/404.html"
-   `((div (@ (id "not-found"))
+   `((div (@ (class "not-found"))
           (h1 "404")
           (h1 "Not Found")))))
 
