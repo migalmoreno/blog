@@ -427,7 +427,7 @@ Computer Science graduate from the University of Kent.")
        (dt (@ (class "descriptions__title")) "PGP")
        (dd (@ (class "descriptions__text"))
            ,(anchor "4956 DAC8 B077 15EA 9F14  E13A EF1F 69BF 5F23 F458"
-                    "assets/pubkey.asc")))
+                    (format #f "https://files.~a/pubkey.asc" %domain))))
       (div (@ (class "descriptions__wrapper"))
        (dt (@ (class "descriptions__title")) "Matrix")
        (dd (@ (class "descriptions__text")) (code "@sloan:conses.eu")))))))
