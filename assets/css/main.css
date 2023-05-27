@@ -570,7 +570,7 @@ figcaption {
     top: 80px;
   }
 
-  .nav__menu {
+  .navbar__menu {
     flex-direction: column;
   }
 
