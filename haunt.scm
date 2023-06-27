@@ -67,7 +67,7 @@
    (project
     #:name "tubo"
     #:synopsis "An alternative web front-end to various streaming sites"
-    #:link "https://git.mianmoreno.com/tubo"
+    #:link (format #f "https://github.com/~a/tubo" %username)
     #:tags '("clojure" "clojurescript" "privacy")
     #:license "GPL-3.0+"
     #:description
@@ -100,7 +100,7 @@ downloads, offline mode, and more.")
    (project
     #:name "nx-router"
     #:synopsis "A general-purpose routing extension for the Nyxt browser"
-    #:link "https://git.mianmoreno.com/nx-router"
+    #:link (format #f "https://github.com/~a/nx-router" %username)
     #:tags '("common-lisp" "nyxt" "browser")
     #:license "BSD 3-Clause"
     #:description
@@ -129,7 +129,7 @@ with unmaintained instances of privacy frontends.")
    (project
     #:name "nx-tailor"
     #:synopsis "A theme manager for the Nyxt browser"
-    #:link "https://git.mianmoreno.com/nx-tailor"
+    #:link (format #f "https://github.com/~a/nx-tailor" %username)
     #:tags '("common-lisp" "nyxt" "browser")
     #:license  "BSD 3-Clause"
     #:description
@@ -149,7 +149,7 @@ depending on the time of the day.")
    (project
     #:name "fdroid.el"
     #:synopsis "An Emacs interface to the F-Droid package repository"
-    #:link "https://git.mianmoreno.com/fdroid.el"
+    #:link (format #f "https://github.com/~a/fdroid.el" %username)
     #:tags '("emacs" "emacs-lisp" "fdroid")
     #:license "GPL-3.0+"
     #:description
@@ -162,7 +162,7 @@ having to download APKs manually.")))
    (project
     #:name "nyxt.el"
     #:synopsis "A minimal API to interact with the Nyxt browser from Emacs"
-    #:link "https://git.mianmoreno.com/nyxt.el"
+    #:link (format #f "https://github.com/~a/nyxt.el" %username)
     #:tags '("emacs" "emacs-lisp" "nyxt")
     #:license "GPL-3.0+"
     #:description
@@ -173,7 +173,7 @@ Emacs X Window Manager (EXWM).")))
    (project
     #:name "dotfiles"
     #:synopsis "Personal configuration based on top of RDE and GNU Guix"
-    #:link "https://git.mianmoreno.com/dotfiles"
+    #:link (format #f "https://github.com/~a/dotfiles" %username)
     #:tags '("guix" "rde" "dotfiles")
     #:license "GPL-3.0+"
     #:description
@@ -187,7 +187,7 @@ packages, services, and features upstream as much as I can.")))
    (project
     #:name "blog"
     #:synopsis "Personal site and blog"
-    #:link "https://git.mianmoreno.com/blog"
+    #:link (format #f "https://github.com/~a/blog" %username)
     #:tags '("scheme" "org-mode" "haunt")
     #:license "GPL-3.0+"
     #:description
@@ -328,8 +328,7 @@ describe my personal projects and contributions.")))))
          (div (@ (class "project__metadata"))
               (span (@ (class "project__metadata-items"))
                     (i (@ (class "fa-brands fa-git-alt project__icon")))
-                    ,(anchor (project-link project)
-                             (string-append (project-link project) "/about")
+                    ,(anchor (project-link project) (project-link project)
                              #:external? #t))
               (span (@ (classs "project__metadata-items"))
                     (i (@ (class "fa-solid fa-file-lines project__icon")))
