@@ -58,9 +58,9 @@
 ;; Defaults
 ;;
 
-(define %domain "mianmoreno.com")
-(define %email "me@mianmoreno.com")
-(define %username "mianmoreno")
+(define %domain "migalmoreno.com")
+(define %email "mail@migalmoreno.com")
+(define %username "migalmoreno")
 (define %fullname "Miguel Ángel Moreno")
 (define %projects
   (list
