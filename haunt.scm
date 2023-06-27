@@ -92,7 +92,7 @@ non-Android users.")
 watch functionality, but support is planned for user playlists, stream
 downloads, offline mode, and more.")
       (figure
-       (img (@ (src "https://files.mianmoreno.com/tubo_channel.jpg")
+       (img (@ (src (format #f "https://files.~a/tubo_channel.jpg" %domain))
                (style "width:100%")
                (alt "Tubo channel page screenshot")
                (class "post__image")))
@@ -140,7 +140,7 @@ to switch between at browser runtime.")
       (p "It also has a timer functionality to automatically change them
 depending on the time of the day.")
       (figure
-       (video (@ (src "https://files.mianmoreno.com/nx_tailor.mp4")
+       (video (@ (src (format #f "https://files.~a/nx_tailor.mp4" %domain))
                  (style "width:100%")
                  (autoplay "true")
                  (controls "true")
@@ -263,15 +263,15 @@ describe my personal projects and contributions.")))))
                               "fa-solid fa-code")
                         (cons (string-append "mailto:" %email)
                               "fa-solid fa-envelope")
-                        (cons "https://linkedin.com/in/mianmoreno"
+                        (cons (format #f "https://linkedin.com/in/~a" %username)
                               "fa-brands fa-linkedin")
                         (cons (string-append "https://git." %domain)
                               "fa-brands fa-git-alt")
                         (cons "https://sr.ht/~mmoreno"
                               "fa-regular fa-circle")
-                        (cons "https://github.com/mianmoreno"
+                        (cons (format #f "https://github.com/~a" %username)
                               "fa-brands fa-github")
-                        (cons "https://gitlab.com/mianmoreno"
+                        (cons (format #f "https://gitlab.com/~a" %username)
                               "fa-brands fa-gitlab"))))
     (div (@ (class "footer__wrapper"))
          "© "
