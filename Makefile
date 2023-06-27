@@ -1,4 +1,4 @@
-DOMAIN=mianmoreno.com
+DOMAIN=migalmoreno.com
 .PHONY: publish/vps publish/sourcehut
 
 build:
