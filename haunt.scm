@@ -66,18 +66,13 @@
   (list
    (project
     #:name "tubo"
-    #:synopsis "An alternative web front-end to various streaming sites"
+    #:synopsis "An all-in-one web front-end to various streaming sites"
     #:link (format #f "https://github.com/~a/tubo" %username)
     #:tags '("clojure" "clojurescript" "privacy")
     #:license "GPL-3.0+"
     #:description
-    `((p "Tubo is an alternative web frontend to some of the most popular
-streaming sites, including:")
-      (ul (@ (class "list"))
-          ,@(map (lambda (i)
-                   `(li (@ (class "list-item--type-bulleted")) ,i))
-                 (list "YouTube" "SoundCloud" "media.ccc.de" "PeerTube"
-                       "Bandcamp")))
+    `((p "Tubo is an all-in-one web front-end for some of the most popular
+streaming sites, including YouTube, SoundCloud, Bandcamp, among other.")
       (p "It acts like a privacy-friendly proxy that compiles all the content
 from the above sites and presents it to you in a distraction-free interface. It
 gathers the necessary data via "
@@ -92,43 +87,43 @@ non-Android users.")
 watch functionality, but support is planned for user playlists, stream
 downloads, offline mode, and more.")
       (figure
-       (img (@ (src (format #f "https://files.~a/tubo_channel.jpg" %domain))
+       (img (@ (src ,(format #f "https://files.~a/tubo_channel.jpg" %domain))
                (style "width:100%")
                (alt "Tubo channel page screenshot")
                (class "post__image")))
        (figcaption "Channel page view"))))
    (project
     #:name "nx-router"
-    #:synopsis "A general-purpose routing extension for the Nyxt browser"
+    #:synopsis "A declarative URL routing extension for Nyxt"
     #:link (format #f "https://github.com/~a/nx-router" %username)
     #:tags '("common-lisp" "nyxt" "browser")
     #:license "BSD 3-Clause"
     #:description
-    `((p "nx-router is a full-fledged URL routing extension for the "
+    `((p "nx-router is a declarative URL routing extension for the "
          ,(anchor "Nyxt" "https://nyxt.atlas.engineer") " browser.")
-      (p "It offers a convenient wrapper around the built-in resource handling
-functionality in Nyxt by introducing " (code "route") " objects users can
-include in their configuration to define redirects, blocklists, resource
-openers, among other, with an easy syntax.")
+      (p "It offers a convenient wrapper around the built-in request resource
+handling functionality in Nyxt by introducing" (code "router") " objects users
+can include in their configuration to define redirects, blocklists, and resource
+openers with an easy and declarative syntax.")
       (p "It aims to be simple while staying composable and flexible.
 Routes are defined like this:")
       ,(highlight-code
         "(make-instance 'router:redirector
-  :trigger \"https://([\\w'-]+)\\.fandom.com/wiki/(.*)\"
-  :redirect-url \"https://breezewiki.com/\\1/wiki/\\2\")"
+  :route \"https://([\\w'-]+)\\.fandom.com/wiki/(.*)\"
+  :redirect \"https://breezewiki.com/\\1/wiki/\\2\")"
         #:lang 'lisp)
       (p "You can also set reverse redirects so that certain URLs get recorded
 with their original path, which is useful if you don't want to have to deal
 with unmaintained instances of privacy frontends.")
       ,(highlight-code
         "(make-instance 'router:redirector
-  :trigger (match-regex \"https://.*google.com/search.*\")
-  :redirect-url (quri:uri \"http://localhost:5000\")
-  :original-url (quri:uri \"https://www.google.com\"))"
+  :route (match-regex \"https://.*google.com/search.*\")
+  :redirect (quri:uri \"http://localhost:5000\")
+  :reverse (quri:uri \"https://www.google.com\"))"
         #:lang 'lisp)))
    (project
     #:name "nx-tailor"
-    #:synopsis "A theme manager for the Nyxt browser"
+    #:synopsis "A theme manager for Nyxt"
     #:link (format #f "https://github.com/~a/nx-tailor" %username)
     #:tags '("common-lisp" "nyxt" "browser")
     #:license  "BSD 3-Clause"
@@ -140,7 +135,7 @@ to switch between at browser runtime.")
       (p "It also has a timer functionality to automatically change them
 depending on the time of the day.")
       (figure
-       (video (@ (src (format #f "https://files.~a/nx_tailor.mp4" %domain))
+       (video (@ (src ,(format #f "https://files.~a/nx_tailor.mp4" %domain))
                  (style "width:100%")
                  (autoplay "true")
                  (controls "true")
@@ -153,7 +148,7 @@ depending on the time of the day.")
     #:tags '("emacs" "emacs-lisp" "fdroid")
     #:license "GPL-3.0+"
     #:description
-    `((p "fdroid.el is a simple completion-based interface to work with
+    `((p "fdroid.el is a completion-based interface to work with
 F-Droid packages from Emacs.")
       (p "Having to deal with Android emulators quite often and needing to
 install packages on initial setup, I developed this project to be able to quickly
@@ -161,7 +156,7 @@ manage F-Droid packages without having to resort to the F-Droid website or
 having to download APKs manually.")))
    (project
     #:name "nyxt.el"
-    #:synopsis "A minimal API to interact with the Nyxt browser from Emacs"
+    #:synopsis "A minimal API to interact with Nyxt from Emacs"
     #:link (format #f "https://github.com/~a/nyxt.el" %username)
     #:tags '("emacs" "emacs-lisp" "nyxt")
     #:license "GPL-3.0+"
@@ -171,16 +166,22 @@ having to download APKs manually.")))
 process seamlessly from Emacs and provides optional integration with the
 Emacs X Window Manager (EXWM).")))
    (project
-    #:name "dotfiles"
-    #:synopsis "Personal configuration based on top of RDE and GNU Guix"
-    #:link (format #f "https://github.com/~a/dotfiles" %username)
+    #:name "guix-config"
+    #:synopsis "Personal Guix configuration"
+    #:link (format #f "https://github.com/~a/guix-config" %username)
     #:tags '("guix" "rde" "dotfiles")
     #:license "GPL-3.0+"
     #:description
-    `((p "My personal set of configuration files crafted on top of Guix and
-RDE. The project is focused on a multi-user setup, with a development build for
-my local machine, a home configuration on top of a foreign distribution for my
-smartphone, and a self-hosted setup for my personal VPS.")
+    `((p "My personal set of configuration files built on top of Guix and
+RDE. The project is focused on providing a central point to all my systems, from
+a home/system configuration in my local development machine to a self-hosted
+setup in my personal VPS.")
+      (figure
+       (img (@ (src ,(format #f "https://files.~a/guix_config.jpg" %domain))
+               (style "width:100%")
+               (alt "Screenshot of my Guix configuration")
+               (class "post__image")))
+       (figcaption "Screenshot of my setup"))
       (p "Previously, I used to maintain this project as a personal Guix
 channel, but over time I found this to be unsustainable, so I now contribute
 packages, services, and features upstream as much as I can.")))
