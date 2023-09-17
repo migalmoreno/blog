@@ -318,10 +318,11 @@ describe my personal projects and contributions.")))))
              ,@(map (lambda (tag)
                       `(li (@ (class "tag"))
                            (a (@ (href
-                                  ,(string-append "/feeds/tags/" tag ".xml")))
+                                  ,(string-append "/feeds/tags/" tag ".xml"))
+                                 (class "tag__link"))
                               ,tag)))
                     (assq-ref (post-metadata post) 'tags))))
-    (div (@ (class "post-container")) ,(post-sxml post))))
+    (div (@ (class "post__container")) ,(post-sxml post))))
 
 (define (project-template project)
   `((div (@ (class "project"))
