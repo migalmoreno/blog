@@ -1,11 +1,12 @@
-function setCopyrightYear() {
+const setCopyrightYear = () => {
   document.querySelector(".footer__year").innerHTML = new Date().getFullYear()
 }
 
-function highlightCurrentRoute() {
-  const rx = /\/+$/
+const highlightCurrentRoute = () => {
+  const routePath = window.location.pathname.split("/").join("")
   for (let el of document.querySelectorAll(".menu-item__link")) {
-    if (el.href.replace(rx, "") === window.location.href.replace(rx, "")) {
+    const linkPath = el.pathname.split("/").join("")
+    if (linkPath === routePath || linkPath && routePath.includes(linkPath)) {
       el.classList.add("menu-item__link--selected")
     }
   }
