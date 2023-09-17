@@ -428,15 +428,19 @@ Computer Science graduate from the University of Kent.")
       (div (@ (class "descriptions__wrapper"))
        (dt (@ (class "descriptions__title")) "Email")
        (dd (@ (class "descriptions__text"))
-           (code "me") " at " (code "$DOMAIN")))
+           (code "mail") " at " (code "$DOMAIN")))
       (div (@ (class "descriptions__wrapper"))
        (dt (@ (class "descriptions__title")) "PGP")
        (dd (@ (class "descriptions__text"))
-           ,(anchor "4956 DAC8 B077 15EA 9F14  E13A EF1F 69BF 5F23 F458"
-                    (format #f "https://files.~a/pubkey.asc" %domain))))
+           ,(anchor '(code "4956 DAC8 B077 15EA 9F14  E13A EF1F 69BF 5F23 F458")
+                    (format #f "https://files.~a/pubkey.asc" %domain)
+                    #:external? #t)))
       (div (@ (class "descriptions__wrapper"))
        (dt (@ (class "descriptions__title")) "Matrix")
-       (dd (@ (class "descriptions__text")) (code "@sloan:conses.eu")))))))
+       (dd (@ (class "descriptions__text"))
+           ,(anchor '(code "@sloan:conses.eu")
+                    "https://matrix.to/#/@sloan:conses.eu"
+                    #:external? #t)))))))
 
 (define not-found-page
   (static-page
