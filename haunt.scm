@@ -358,10 +358,24 @@ describe my personal projects and contributions.")))))
   `((h1 (@ (class "portfolio__title")) ,title)
     (div (@ (class "portfolio"))
          ,@(map (lambda (project)
-                  `(a (@ (href ,(project-uri project))
-                         (class "project-item"))
-                      (h1 (@ (class "project-item__title"))
-                          ,(project-name project))
+                  `(div (@ (class "project-item"))
+                      (div (@ (class "project-item__heading"))
+                           (div
+                            (a (@ (class "project-item__title")
+                                  (href ,(project-uri project)))
+                               ,(project-name project))
+                            ,(anchor '(i (@ (class "fa-brands fa-github")))
+                                     (project-link project)
+                                     #:extra-classes "project-item__link"
+                                     #:external? #t))
+                           (div
+                            (@ (class "project-item__stats"))
+                            (div
+                             (a (@ (class "project-item__stargazers")
+                                   (href ,(string-append (project-link project)
+                                                         "/stargazers")))))
+                            (div
+                             (i (@ (class "icon__star fa-regular fa-star"))))))
                       (ul (@ (class "tags"))
                           ,@(map (lambda (tag)
                                    `(li (@ (class "tag")) ,tag))
