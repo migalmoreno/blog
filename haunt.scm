@@ -401,14 +401,16 @@ describe my personal projects and contributions.")))))
        %blog-theme site "Home"
        `((div (@ (class "hero"))
               (h1 (@ (class "hero__title")) "Hi, I'm Miguel Ángel!")
-              (p "I'm a software engineer based in Madrid and a recent
-Computer Science graduate from the University of Kent.")
+              (p "I'm a front-end developer currently based in Madrid working at "
+                 ,(anchor "GMV" "https://gmv.com" #:external? #t)
+                 " (SST & STM) and a Computer Science graduate from the University of Kent.")
               (p "My interests currently revolve around these topics:")
               (ul (@ (class "list"))
                   ,@(map (lambda (i)
                            `(li (@ (class "list-item--type-bulleted")) ,i))
                          (list "Functional programming" "LISP" "Web development"
-                               "Operating systems"
+                               "Operating systems and reproducibility"
+                               "Compilers"
                                "Introspectable and extensible tooling"
                                "Digital privacy"
                                "Free and open source software"))))
