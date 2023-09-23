@@ -39,15 +39,16 @@
                          (with-layout %blog-theme site title body)
                          sxml->html)))
 
-(define* (anchor label url #:key external? extra-classes)
+(define* (anchor label url #:key external? extra-classes (extra-attributes '()))
   `(a (@ (href ,url)
          ,@(if extra-classes
                `((class ,(string-append "main__anchor " extra-classes)))
                '((class "main__anchor")))
-         ,@(if external?
-               '((rel noopener)
-                 (target _blank))
-               '()))
+         ,@(append extra-attributes
+                   (if external?
+                       '((rel noopener)
+                         (target _blank))
+                       '())))
       ,label))
 
 (define (post-uri site post)
@@ -252,13 +253,14 @@ describe my personal projects and contributions.")))))
 (define footer
   `(footer (@ (class "footer"))
            (div (@ (class "footer__wrapper"))
-                ,@(map (lambda (item)
-                         (anchor `(i (@ (class
-                                          ,(string-append (cdr item)
-                                                          " footer__icon"))))
-                                 (car item)
-                                 #:external? #t
-                                 #:extra-classes "footer__link"))
+                ,@(map (match-lambda
+                         ((? list? e) e)
+                         ((label . class)
+                          (anchor `(i (@ (class ,(format #f "~a footer__icon"
+                                                         class))))
+                                  label
+                                  #:external? #t
+                                  #:extra-classes "footer__link")))
                        (list
                         (cons "/feed.xml" "fa-solid fa-rss")
                         (cons (format #f "https://github.com/~a/blog" %username)
@@ -267,8 +269,12 @@ describe my personal projects and contributions.")))))
                               "fa-solid fa-envelope")
                         (cons (format #f "https://linkedin.com/in/~a" %username)
                               "fa-brands fa-linkedin")
-                        (cons (format #f "https://fosstodon.org/@~a" %username)
-                              "fa-brands fa-mastodon")
+                        (anchor
+                         `(i (@ (class "fa-brands fa-mastodon footer__icon")))
+                         (format #f "https://fosstodon.org/@~a" %username)
+                         #:external? #t
+                         #:extra-classes "footer__link"
+                         #:extra-attributes '((rel "me")))
                         (cons (string-append "https://git." %domain)
                               "fa-brands fa-git-alt")
                         (cons (string-append "https://ko-fi.com/" %username)
