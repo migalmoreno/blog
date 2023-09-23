@@ -1,5 +1,5 @@
 DOMAIN=migalmoreno.com
-.PHONY: publish/vps publish/sourcehut
+.PHONY: publish
 
 build:
 	haunt build
