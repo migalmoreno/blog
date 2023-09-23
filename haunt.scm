@@ -106,7 +106,7 @@ handling functionality in Nyxt by introducing" (code "router") " objects users
 can include in their configuration to define redirects, blocklists, and resource
 openers with an easy and declarative syntax.")
       (p "It aims to be simple while staying composable and flexible.
-Routes are defined like this:")
+Routers are defined like this:")
       ,(highlight-code
         "(make-instance 'router:redirector
   :route \"https://([\\w'-]+)\\.fandom.com/wiki/(.*)\"
