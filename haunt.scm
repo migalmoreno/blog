@@ -62,7 +62,7 @@
 (define %domain "migalmoreno.com")
 (define %email "mail@migalmoreno.com")
 (define %username "migalmoreno")
-(define %fullname "Miguel Ángel Moreno")
+(define %fullname "Miguel Angel Moreno")
 (define %projects
   (list
    (project
@@ -178,7 +178,7 @@ RDE. The project is focused on providing a central point to all my systems, from
 a home/system configuration in my local development machine to a self-hosted
 setup in my personal VPS.")
       (figure
-       (img (@ (src ,(format #f "https://files.~a/guix_config.jpg" %domain))
+       (img (@ (src ,(format #f "https://files.~a/guix_config_setup.jpg" %domain))
                (style "width:100%")
                (alt "Screenshot of my Guix configuration")
                (class "post__image")))
@@ -422,8 +422,8 @@ describe my personal projects and contributions.")))))
       (with-layout
        %blog-theme site "Home"
        `((div (@ (class "hero"))
-              (h1 (@ (class "hero__title")) "Hi, I'm Miguel Ángel!")
-              (p "I'm a front-end developer currently based in Madrid working at "
+              (h1 (@ (class "hero__title")) "Hi, I'm Miguel Angel!")
+              (p "I'm a software developer currently based in Madrid working at "
                  ,(anchor "GMV" "https://gmv.com" #:external? #t)
                  " (SST & STM) and a Computer Science graduate from the University of Kent.")
               (p "My interests currently revolve around these topics:")
@@ -459,6 +459,10 @@ describe my personal projects and contributions.")))))
            ,(anchor '(code "4956 DAC8 B077 15EA 9F14  E13A EF1F 69BF 5F23 F458")
                     (format #f "https://files.~a/pubkey.asc" %domain)
                     #:external? #t)))
+      (div (@ (class "descriptions__wrapper"))
+           (dt (@ (class "descriptions__title")) "IRC")
+           (dd (@ (class "descriptions__text"))
+               (code "migalmoreno") "at Libera.chat and OFTC.net"))
       (div (@ (class "descriptions__wrapper"))
        (dt (@ (class "descriptions__title")) "Matrix")
        (dd (@ (class "descriptions__text"))
