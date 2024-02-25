@@ -31,7 +31,6 @@ const setPortfolioMetadata = async () => {
         }
       } catch (err) {
         starIcon.style.display = "none"
-        throw(err)
       }
     }
     if (projectItemsStars.length > 0) {
