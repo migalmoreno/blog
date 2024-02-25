@@ -8,6 +8,7 @@
              (haunt reader)
              (haunt site)
              (ice-9 match)
+             (srfi srfi-1)
              (srfi srfi-19)
              (syntax-highlight)
              (syntax-highlight lisp)
@@ -62,17 +63,17 @@
 (define %domain "migalmoreno.com")
 (define %email "mail@migalmoreno.com")
 (define %username "migalmoreno")
-(define %fullname "Miguel Angel Moreno")
+(define %fullname "Miguel Ángel Moreno")
 (define %projects
   (list
    (project
     #:name "tubo"
-    #:synopsis "An all-in-one web front-end to various streaming sites"
+    #:synopsis "A libre streaming front-end for the web"
     #:link (format #f "https://github.com/~a/tubo" %username)
-    #:tags '("clojure" "clojurescript" "privacy")
+    #:tags '("clojure" "clojurescript")
     #:license "GPL-3.0+"
     #:description
-    `((p "Tubo is an all-in-one web front-end for some of the most popular
+    `((p "Tubo is a libre web front-end for some of the most popular
 streaming sites, including YouTube, SoundCloud, Bandcamp, among other.")
       (p "It acts like a privacy-friendly proxy that compiles all the content
 from the above sites and presents it to you in a distraction-free interface. It
@@ -84,9 +85,10 @@ gathers the necessary data via "
 app, which means no official APIs are used. The ultimate goal behind this
 project is to offer a web-based alternative to NewPipe for desktop and
 non-Android users.")
-      (p "Currently, it features an audio-only player and basic search and
-watch functionality, but support is planned for user playlists, stream
-downloads, offline mode, and more.")
+      (p "Currently, it features basic search and watch functionality,
+audio-only playback, media queuing, bookmarks, and distraction-free
+settings. Its roadmap includes user playlists, downloads, offline mode, and
+more.")
       (figure
        (img (@ (src ,(format #f "https://files.~a/tubo_channel.jpg" %domain))
                (style "width:100%")
@@ -97,7 +99,7 @@ downloads, offline mode, and more.")
     #:name "nx-router"
     #:synopsis "A declarative URL routing extension for Nyxt"
     #:link (format #f "https://github.com/~a/nx-router" %username)
-    #:tags '("common-lisp" "nyxt" "browser")
+    #:tags '("common-lisp" "browser")
     #:license "BSD 3-Clause"
     #:description
     `((p "nx-router is a declarative URL routing extension for the "
@@ -126,7 +128,7 @@ with unmaintained instances of privacy frontends.")
     #:name "nx-tailor"
     #:synopsis "A theme manager for Nyxt"
     #:link (format #f "https://github.com/~a/nx-tailor" %username)
-    #:tags '("common-lisp" "nyxt" "browser")
+    #:tags '("common-lisp" "browser")
     #:license  "BSD 3-Clause"
     #:description
     `((p "nx-tailor is a theme manager for the "
@@ -146,20 +148,20 @@ depending on the time of the day.")
     #:name "fdroid.el"
     #:synopsis "An Emacs interface to the F-Droid package repository"
     #:link (format #f "https://github.com/~a/fdroid.el" %username)
-    #:tags '("emacs" "emacs-lisp" "fdroid")
+    #:tags '("emacs-lisp" "fdroid")
     #:license "GPL-3.0+"
     #:description
     `((p "fdroid.el is a completion-based interface to work with
 F-Droid packages from Emacs.")
       (p "Having to deal with Android emulators quite often and needing to
-install packages on initial setup, I developed this project to be able to quickly
-manage F-Droid packages without having to resort to the F-Droid website or
-having to download APKs manually.")))
+install packages on initial setup, I developed this project to be able to
+quickly manage F-Droid packages without having to resort to the F-Droid website
+or having to download APKs manually.")))
    (project
     #:name "nyxt.el"
     #:synopsis "A minimal API to interact with Nyxt from Emacs"
     #:link (format #f "https://github.com/~a/nyxt.el" %username)
-    #:tags '("emacs" "emacs-lisp" "nyxt")
+    #:tags '("emacs-lisp" "nyxt")
     #:license "GPL-3.0+"
     #:description
     `((p "nyxt.el is a minimal API to interact with Nyxt from Emacs.")
@@ -170,7 +172,7 @@ Emacs X Window Manager (EXWM).")))
     #:name "guix-config"
     #:synopsis "Personal Guix configuration"
     #:link (format #f "https://github.com/~a/guix-config" %username)
-    #:tags '("guix" "rde" "dotfiles")
+    #:tags '("scheme" "rde" "dotfiles")
     #:license "GPL-3.0+"
     #:description
     `((p "My personal set of configuration files built on top of Guix and
@@ -178,7 +180,8 @@ RDE. The project is focused on providing a central point to all my systems, from
 a home/system configuration in my local development machine to a self-hosted
 setup in my personal VPS.")
       (figure
-       (img (@ (src ,(format #f "https://files.~a/guix_config_setup.jpg" %domain))
+       (img (@ (src ,(format #f "https://files.~a/guix_config_setup.jpg"
+                             %domain))
                (style "width:100%")
                (alt "Screenshot of my Guix configuration")
                (class "post__image")))
@@ -421,21 +424,24 @@ describe my personal projects and contributions.")))))
       "index.html"
       (with-layout
        %blog-theme site "Home"
-       `((div (@ (class "hero"))
-              (h1 (@ (class "hero__title")) "Hi, I'm Miguel Angel!")
-              (p "I'm a software developer currently based in Madrid working at "
-                 ,(anchor "GMV" "https://gmv.com" #:external? #t)
-                 " (SST & STM) and a Computer Science graduate from the University of Kent.")
-              (p "My interests currently revolve around these topics:")
-              (ul (@ (class "list"))
-                  ,@(map (lambda (i)
-                           `(li (@ (class "list-item--type-bulleted")) ,i))
-                         (list "Functional programming" "LISP" "Web development"
-                               "Operating systems and reproducibility"
-                               "Compilers"
-                               "Introspectable and extensible tooling"
-                               "Digital privacy"
-                               "Free and open source software"))))
+       `((div
+          (@ (class "hero"))
+          (h1 (@ (class "hero__title"))
+              ,(format #f "Hi, I'm ~a!"
+                       (string-join
+                        (drop-right (string-split %fullname #\space) 1))))
+          (p "I'm a software developer currently based in Madrid working at "
+             ,(anchor "GMV" "https://gmv.com" #:external? #t)
+             " (SST & STM) and an open source software enthusiast.")
+          (p "My interests currently revolve around these topics:")
+          (ul (@ (class "list"))
+              ,@(map (lambda (i)
+                       `(li (@ (class "list-item--type-bulleted")) ,i))
+                     (list "Functional programming"
+                           "Web development"
+                           "Operating systems and reproducibility"
+                           "Compilers"
+                           "Introspectable and extensible tooling"))))
          (div (@ (class "blog blog--type-preview"))
               (h2 (@ (class "blog__title")) "Latest Posts"
                   ,(anchor '(button (@ (class "button button--type-border"))
