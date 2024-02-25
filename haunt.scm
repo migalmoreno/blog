@@ -85,12 +85,13 @@ gathers the necessary data via "
 app, which means no official APIs are used. The ultimate goal behind this
 project is to offer a web-based alternative to NewPipe for desktop and
 non-Android users.")
-      (p "Currently, it features basic search and watch functionality,
-audio-only playback, media queuing, bookmarks, and distraction-free
-settings. Its roadmap includes user playlists, downloads, offline mode, and
-more.")
+      (p "Currently, it features search and watch functionality, audio-only
+playback, media queuing, bookmarks, and settings. Its roadmap includes feeds,
+downloads, offline mode, and more.")
       (figure
-       (img (@ (src ,(format #f "https://files.~a/tubo_channel.jpg" %domain))
+       (img (@ (src
+                ,(format #f "https://files.~a/tubo_channel_dark_media_queue.jpg"
+                         %domain))
                (style "width:100%")
                (alt "Tubo channel page screenshot")
                (class "post__image")))
