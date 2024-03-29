@@ -281,8 +281,6 @@ describe my personal projects and contributions.")))))
                          #:extra-attributes '((rel "me")))
                         (cons (string-append "https://git." %domain)
                               "fa-brands fa-git-alt")
-                        (cons (string-append "https://ko-fi.com/" %username)
-                              "fa-solid fa-mug-saucer")
                         (cons "https://sr.ht/~mmoreno"
                               "fa-regular fa-circle")
                         (cons (format #f "https://github.com/~a" %username)
