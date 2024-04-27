@@ -453,16 +453,6 @@ describe my personal projects and contributions.")))))
        (dd (@ (class "descriptions__text"))
            ,(anchor '(code "4956 DAC8 B077 15EA 9F14  E13A EF1F 69BF 5F23 F458")
                     (format #f "https://files.~a/pubkey.asc" %domain)
-                    #:external? #t)))
-      (div (@ (class "descriptions__wrapper"))
-           (dt (@ (class "descriptions__title")) "IRC")
-           (dd (@ (class "descriptions__text"))
-               (code "migalmoreno") "at Libera.chat and OFTC.net"))
-      (div (@ (class "descriptions__wrapper"))
-       (dt (@ (class "descriptions__title")) "Matrix")
-       (dd (@ (class "descriptions__text"))
-           ,(anchor '(code "@sloan:conses.eu")
-                    "https://matrix.to/#/@sloan:conses.eu"
                     #:external? #t)))))))
 
 (define not-found-page
