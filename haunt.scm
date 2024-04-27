@@ -384,7 +384,7 @@ describe my personal projects and contributions.")))))
                 projects))))
 
 (define %blog-collections
-  `(("Blog" "index.html" ,posts/reverse-chronological)))
+  `(("Blog" "posts/index.html" ,posts/reverse-chronological)))
 
 (define %portfolio-collections
   `(("Projects" "index.html")))
