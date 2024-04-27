@@ -267,10 +267,6 @@ describe my personal projects and contributions.")))))
                                   #:extra-classes "footer__link")))
                        (list
                         (cons "/feed.xml" "fa-solid fa-rss")
-                        (cons (format #f "https://github.com/~a/blog" %username)
-                              "fa-solid fa-code")
-                        (cons (string-append "mailto:" %email)
-                              "fa-solid fa-envelope")
                         (cons (format #f "https://linkedin.com/in/~a" %username)
                               "fa-brands fa-linkedin")
                         (anchor
@@ -279,14 +275,8 @@ describe my personal projects and contributions.")))))
                          #:external? #t
                          #:extra-classes "footer__link"
                          #:extra-attributes '((rel "me")))
-                        (cons (string-append "https://git." %domain)
-                              "fa-brands fa-git-alt")
-                        (cons "https://sr.ht/~mmoreno"
-                              "fa-regular fa-circle")
                         (cons (format #f "https://github.com/~a" %username)
-                              "fa-brands fa-github")
-                        (cons (format #f "https://gitlab.com/~a" %username)
-                              "fa-brands fa-gitlab"))))
+                              "fa-brands fa-github"))))
     (div (@ (class "footer__wrapper"))
          "© "
          (span (@ (class "footer__year")))
