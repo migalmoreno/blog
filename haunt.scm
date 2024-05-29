@@ -18,7 +18,7 @@
 
 
 ;;
-;; Utilities
+;; Components/Utilities
 ;;
 
 (define* (highlight-code code #:key (lang 'scheme))
@@ -52,167 +52,11 @@
                        '())))
       ,label))
 
-(define (post-uri site post)
-  (string-append "/posts/" (site-post-slug site post) ".html"))
-
-
-;;
-;; Defaults
-;;
-
-(define %domain "migalmoreno.com")
-(define %email "mail@migalmoreno.com")
-(define %username "migalmoreno")
-(define %fullname "Miguel Ángel Moreno")
-(define %projects
-  (list
-   (project
-    #:name "tubo"
-    #:synopsis "A libre streaming front-end for the web"
-    #:link (format #f "https://github.com/~a/tubo" %username)
-    #:tags '("clojure" "clojurescript")
-    #:license "GPL-3.0+"
-    #:description
-    `((p "Tubo is a libre web front-end for some of the most popular
-streaming sites, including YouTube, SoundCloud, Bandcamp, among other.")
-      (p "It acts like a privacy-friendly proxy that compiles all the content
-from the above sites and presents it to you in a distraction-free interface. It
-gathers the necessary data via "
-         ,(anchor "NewPipeExtractor"
-                  "https://github.com/TeamNewPipe/NewPipeExtractor")
-         ", the library that powers the popular "
-         ,(anchor "NewPipe" "https://github.com/TeamNewPipe/NewPipe") " Android
-app, which means no official APIs are used. The ultimate goal behind this
-project is to offer a web-based alternative to NewPipe for desktop and
-non-Android users.")
-      (p "Currently, it features search and watch functionality, audio-only
-playback, media queuing, bookmarks, and settings. Its roadmap includes feeds,
-downloads, offline mode, and more.")
-      (figure
-       (img (@ (src
-                ,(format #f "https://files.~a/tubo_channel_dark_media_queue.jpg"
-                         %domain))
-               (style "width:100%")
-               (alt "Tubo channel page screenshot")
-               (class "post__image")))
-       (figcaption "Channel page view"))))
-   (project
-    #:name "nx-router"
-    #:synopsis "A declarative URL routing extension for Nyxt"
-    #:link (format #f "https://github.com/~a/nx-router" %username)
-    #:tags '("common-lisp" "browser")
-    #:license "BSD 3-Clause"
-    #:description
-    `((p "nx-router is a declarative URL routing extension for the "
-         ,(anchor "Nyxt" "https://nyxt.atlas.engineer") " browser.")
-      (p "It offers a convenient wrapper around the built-in request resource
-handling functionality in Nyxt by introducing" (code "router") " objects users
-can include in their configuration to define redirects, blocklists, and resource
-openers with an easy and declarative syntax.")
-      (p "It aims to be simple while staying composable and flexible.
-Routers are defined like this:")
-      ,(highlight-code
-        "(make-instance 'router:redirector
-  :route \"https://([\\w'-]+)\\.fandom.com/wiki/(.*)\"
-  :redirect \"https://breezewiki.com/\\1/wiki/\\2\")"
-        #:lang 'lisp)
-      (p "You can also set reverse redirects so that certain URLs get recorded
-with their original path, which is useful if you don't want to have to deal
-with unmaintained instances of privacy frontends.")
-      ,(highlight-code
-        "(make-instance 'router:redirector
-  :route (match-regex \"https://.*google.com/search.*\")
-  :redirect (quri:uri \"http://localhost:5000\")
-  :reverse (quri:uri \"https://www.google.com\"))"
-        #:lang 'lisp)))
-   (project
-    #:name "nx-tailor"
-    #:synopsis "A theme manager for Nyxt"
-    #:link (format #f "https://github.com/~a/nx-tailor" %username)
-    #:tags '("common-lisp" "browser")
-    #:license  "BSD 3-Clause"
-    #:description
-    `((p "nx-tailor is a theme manager for the "
-         ,(anchor "Nyxt" "https://nyxt.atlas.engineer") " browser. It leverages
-the built-in " (code "nyxt/theme") " library to allow defining multiple themes
-to switch between at browser runtime.")
-      (p "It also has a timer functionality to automatically change them
-depending on the time of the day.")
-      (figure
-       (video (@ (src ,(format #f "https://files.~a/nx_tailor.mp4" %domain))
-                 (style "width:100%")
-                 (autoplay "true")
-                 (controls "true")
-                 (class "post__image")))
-       (figcaption "Changing the theme via the prompt buffer"))))
-   (project
-    #:name "fdroid.el"
-    #:synopsis "An Emacs interface to the F-Droid package repository"
-    #:link (format #f "https://github.com/~a/fdroid.el" %username)
-    #:tags '("emacs-lisp" "fdroid")
-    #:license "GPL-3.0+"
-    #:description
-    `((p "fdroid.el is a completion-based interface to work with
-F-Droid packages from Emacs.")
-      (p "Having to deal with Android emulators quite often and needing to
-install packages on initial setup, I developed this project to be able to
-quickly manage F-Droid packages without having to resort to the F-Droid website
-or having to download APKs manually.")))
-   (project
-    #:name "nyxt.el"
-    #:synopsis "A minimal API to interact with Nyxt from Emacs"
-    #:link (format #f "https://github.com/~a/nyxt.el" %username)
-    #:tags '("emacs-lisp" "nyxt")
-    #:license "GPL-3.0+"
-    #:description
-    `((p "nyxt.el is a minimal API to interact with Nyxt from Emacs.")
-      (p "It contains a useful helper " (code "nyxt-run") " to run a Nyxt
-process seamlessly from Emacs and provides optional integration with the
-Emacs X Window Manager (EXWM).")))
-   (project
-    #:name "guix-config"
-    #:synopsis "Personal Guix configuration"
-    #:link (format #f "https://github.com/~a/guix-config" %username)
-    #:tags '("scheme" "rde" "dotfiles")
-    #:license "GPL-3.0+"
-    #:description
-    `((p "My personal set of configuration files built on top of Guix and
-RDE. The project is focused on providing a central point to all my systems, from
-a home/system configuration in my local development machine to a self-hosted
-setup in my personal VPS.")
-      (figure
-       (img (@ (src ,(format #f "https://files.~a/guix_config_setup.jpg"
-                             %domain))
-               (style "width:100%")
-               (alt "Screenshot of my Guix configuration")
-               (class "post__image")))
-       (figcaption "Screenshot of my setup"))
-      (p "Previously, I used to maintain this project as a personal Guix
-channel, but over time I found this to be unsustainable, so I now contribute
-packages, services, and features upstream as much as I can.")))
-   (project
-    #:name "blog"
-    #:synopsis "Personal site and blog"
-    #:link (format #f "https://github.com/~a/blog" %username)
-    #:tags '("scheme" "org-mode" "haunt")
-    #:license "GPL-3.0+"
-    #:description
-    `((p "My personal blog built with the "
-         ,(anchor "Haunt" "https://dthompson.us/projects/haunt.html")
-         " static site generator, which has allowed me to write the entire site
-as a Guile Scheme program, and "
-         ,(anchor "ox-haunt" "https://git.sr.ht/~jakob/ox-haunt")
-         ", an Org mode export back-end to generate the corresponding HTML
-files for the blog entries.")
-      (p "For the most part, I've followed the Haunt guidelines outlined in its
-manual and use the default utilities, although I've  added a custom "
-         (code "portfolio") " builder to make it more convenient to list and
-describe my personal projects and contributions.")))))
-
-
-;;
-;; Components
-;;
+(define (bulleted-list entries)
+  `(ul (@ (class "list"))
+       ,@(map (lambda (i)
+                `(li (@ (class "list-item--type-bulleted")) ,i))
+              entries)))
 
 (define (post-entries site posts)
   `(ul (@ (class "blog__wrapper"))
@@ -233,6 +77,187 @@ describe my personal projects and contributions.")))))
 (define (script name)
   `(script (@ (type "text/javascript")
               (src ,(string-append "/assets/js/" name ".js")))))
+
+
+(define (post-uri site post)
+  (string-append "/posts/" (site-post-slug site post) ".html"))
+
+
+;;
+;; Defaults
+;;
+
+(define %domain "migalmoreno.com")
+(define %email "mail@migalmoreno.com")
+(define %username "migalmoreno")
+(define %fullname "Miguel Ángel Moreno")
+
+(define (project-uri name)
+  (format #f "https://git.~a/~a" %domain name))
+
+(define %projects
+  (list
+   (project
+    #:name "tubo"
+    #:synopsis "A libre streaming front-end for the web"
+    #:link (project-uri "tubo")
+    #:tags '("clojure" "clojurescript")
+    #:license "AGPL-3.0"
+    #:description
+    `((p "Tubo is a web front-end to many streaming platforms (YouTube,
+ SoundCloud, Bandcamp, etc.).")
+      (p "It acts like a privacy-friendly middleman that gathers the content
+from these sites and displays it to you in a distraction-free interface along
+with features that are usually locked behind premium subscriptions. Its ultimate
+goal is to offer a full-fledged web-based alternative to "
+         ,(anchor "Newpipe" "https://github.com/TeamNewPipe/NewPipe") ".")
+      (br)
+      (h3 "Tech Stack")
+      (p "Tubo is a Clojure(Script) full-stack application that interops with
+the " ,(anchor "NewPipeExtractor"
+              "https://github.com/TeamNewPipe/NewPipeExtractor") " library.
+Main tools include:")
+      ,(bulleted-list
+        (list "http-kit" "ring" "reitit" "re-frame" "reagent" "promesa"
+              "deps.edn" "shadow-cljs" "webpack" "tailwindcss" "docker"))))
+   (project
+    #:name "nx-router"
+    #:synopsis "A declarative URL routing extension for Nyxt"
+    #:link (project-uri "nx-router")
+    #:tags '("common-lisp" "browser")
+    #:license "BSD 3-Clause"
+    #:description
+    `((p "nx-router is a declarative URL routing extension for the "
+         ,(anchor "Nyxt" "https://nyxt.atlas.engineer") " browser.")
+      (p "It offers a convenient wrapper around the built-in request resource
+handling functionality in Nyxt by introducing" (code "router") " objects users
+can include in their configuration to define redirects, blocklists, and resource
+openers with an easy and declarative syntax.")
+      (p "It aims to be simple while staying composable and flexible.
+Routers are defined like this:")
+      ,(highlight-code
+        "(list
+  (make-instance 'router:redirector
+    :name 'fandom
+    :route \"https://([\\w'-]+)\\.fandom.com/wiki/(.*)\"
+    :redirect \"https://breezewiki.com/\\1/wiki/\\2\")
+  (make-instance 'router:blocker
+    :name 'fandom
+    :route (match-domain \"fandom.com\")
+    :instances-builder router:breezewiki-instances-builder
+    :blocklist \".*/search\")
+  (make-instance 'router:opener
+    :name 'fandom
+    :resource \"mpv --video=no ~a\"))"
+        #:lang 'lisp)
+      (p "A particular feature of the redirector router is support for reverse redirects
+so that certain URLs get recorded with their original path, which is useful if
+you don't want to record alternative frontends URLs and potentially deal with
+unmaintained instances in the future.")
+      ,(highlight-code
+        "(make-instance 'router:redirector
+  :route (match-regex \"https://.*google.com/search.*\")
+  :redirect (quri:uri \"http://localhost:5000\")
+  :reverse (quri:uri \"https://www.google.com\"))"
+        #:lang 'lisp)))
+   (project
+    #:name "nx-tailor"
+    #:synopsis "A theme manager for Nyxt"
+    #:link (project-uri "nx-tailor")
+    #:tags '("common-lisp" "browser")
+    #:license  "BSD 3-Clause"
+    #:description
+    `((p "nx-tailor is a theme manager for the "
+         ,(anchor "Nyxt" "https://nyxt.atlas.engineer") " browser. It leverages
+the built-in " (code "nyxt/theme") " library to allow defining multiple themes
+to switch between at browser runtime.")
+      (p "I developed this extension because to this day there's no easy way
+to preview Nyxt themes without restarting the browser and I wanted to bring the
+same REPL-based interactivity to theme development.")
+      (p "Since then, the feature set has grown and it now also supports user-specified
+criteria for theme selection at launch and a timer functionality to
+automatically switch it based on the time of the day.")))
+   (project
+    #:name "nx-mosaic"
+    #:synopsis "A configurable new-buffer page for Nyxt"
+    #:link (project-uri "nx-mosaic")
+    #:tags '("common-lisp" "browser")
+    #:license  "BSD 3-Clause"
+    #:description
+    `((p "nx-mosaic is a highly customizable new-buffer page (startpage) for
+the " ,(anchor "Nyxt" "https://nyxt.atlas.engineer") " browser. It's inspired
+by the " ,(anchor "Tabliss" "https://tabliss.io") " web extension, and aims to
+create a Nyxt-native startpage that you can control to your heart's content
+via a wide array of widgets.")))
+   (project
+    #:name "fdroid.el"
+    #:synopsis "An Emacs interface to the F-Droid package repository"
+    #:link (project-uri "fdroid.el")
+    #:tags '("emacs-lisp" "fdroid")
+    #:license "GPL-3.0+"
+    #:description
+    `((p "fdroid.el is a completion-based interface to work with
+F-Droid packages from Emacs.")
+      (p "Having to deal with Android emulators quite often and needing to
+install packages on initial setup, I developed this library to be able to
+quickly manage F-Droid packages without having to resort to the F-Droid website
+or having to download APKs manually.")))
+   (project
+    #:name "nyxt.el"
+    #:synopsis "A minimal API to interact with Nyxt from Emacs"
+    #:link (project-uri "nyxt.el")
+    #:tags '("emacs-lisp" "nyxt")
+    #:license "GPL-3.0+"
+    #:description
+    `((p "nyxt.el is a minimal API to interact with Nyxt from Emacs. I developed this
+library to make it easy for others to build their own Nyxt<->Emacs functionality.")
+      (p "For this, it contains a useful helper " (code "nyxt-run") " which launches
+or connects to an existing Nyxt process with a specified Nyxt command.")
+      (p "If you're interested in getting data from Nyxt without sending any commands
+through, you can use the " (code "nyxt--sly-eval") " function, and create your own
+interactive functions along these lines:")
+      ,(highlight-code
+        "(defun nyxt-insert-url ()
+  (interactive)
+  (insert (nyxt--sly-eval '(render-url (url (current-buffer))))))"
+        #:lang 'lisp)))
+   (project
+    #:name "guix-config"
+    #:synopsis "Personal Guix configuration"
+    #:link (project-uri "guix-config")
+    #:tags '("scheme" "rde" "dotfiles")
+    #:license "GPL-3.0+"
+    #:description
+    `((p "My personal set of configuration files built on top of Guix and
+RDE. The goal is to provide a central point to all my systems, from a
+home/system configuration in my local development machine to a self-hosted setup
+in my personal VPS.")
+      (p "Previously, I used to maintain this repository as a personal Guix
+channel, but over time I found this to be unsustainable, so I now contribute
+packages, services, and features upstream as much as I can.")))
+   (project
+    #:name "blog"
+    #:synopsis "Personal site and blog"
+    #:link (project-uri "blog")
+    #:tags '("scheme" "org-mode" "haunt")
+    #:license "GPL-3.0+"
+    #:description
+    `((p "My personal blog built with the "
+         ,(anchor "Haunt" "https://dthompson.us/projects/haunt.html")
+         " static site generator, which has allowed me to write the entire site
+as a Guile Scheme program, and "
+         ,(anchor "ox-haunt" "https://git.sr.ht/~jakob/ox-haunt")
+         ", an Org mode export back-end to generate the corresponding HTML
+files for the blog entries.")
+      (p "For the most part, I've followed the Haunt guidelines outlined in its
+manual and use the default utilities, although I've  added a custom "
+         (code "portfolio") " builder to make it more convenient to list and
+describe my personal projects and contributions.")))))
+
+
+;;
+;; Layouts
+;;
 
 (define navbar
   `(header (@ (class "navbar"))
