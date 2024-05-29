@@ -389,18 +389,14 @@ describe my personal projects and contributions.")))))
               ,(format #f "Hi, I'm ~a!"
                        (string-join
                         (drop-right (string-split %fullname #\space) 1))))
-          (p "I'm a software developer currently based in Madrid working at "
-             ,(anchor "GMV" "https://gmv.com" #:external? #t)
-             " (SST & STM) and an open source software enthusiast.")
-          (p "My interests currently revolve around these topics:")
-          (ul (@ (class "list"))
-              ,@(map (lambda (i)
-                       `(li (@ (class "list-item--type-bulleted")) ,i))
-                     (list "Functional programming"
-                           "Web development"
-                           "Operating systems and reproducibility"
-                           "Compilers"
-                           "Introspectable and extensible tooling"))))
+          (p "Software developer currently based in Madrid working in the
+Space Surveillance & Tracking and Space Traffic Management (SST & STM) division at "
+             ,(anchor "GMV" "https://gmv.com" #:external? #t) ".")
+          (p "Particularly interested in functional programming and its
+applications in web development, reproducible operating systems, and
+compilers.")
+          (p "Avid open source contributor and maintainer. Feel free to check
+out some of my " ,(anchor "projects" "/projects") "."))
          (div (@ (class "blog blog--type-preview"))
               (h2 (@ (class "blog__title")) "Latest Posts"
                   ,(anchor '(button (@ (class "button button--type-border"))
