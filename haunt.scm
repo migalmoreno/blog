@@ -254,33 +254,6 @@ describe my personal projects and contributions.")))))
                              ("Blog" . "/posts")
                              ("Contact" . "/contact.html")))))))
 
-(define footer
-  `(footer (@ (class "footer"))
-           (div (@ (class "footer__wrapper"))
-                ,@(map (match-lambda
-                         ((? list? e) e)
-                         ((label . class)
-                          (anchor `(i (@ (class ,(format #f "~a footer__icon"
-                                                         class))))
-                                  label
-                                  #:external? #t
-                                  #:extra-classes "footer__link")))
-                       (list
-                        (cons "/feed.xml" "fa-solid fa-rss")
-                        (cons (format #f "https://linkedin.com/in/~a" %username)
-                              "fa-brands fa-linkedin")
-                        (anchor
-                         `(i (@ (class "fa-brands fa-mastodon footer__icon")))
-                         (format #f "https://fosstodon.org/@~a" %username)
-                         #:external? #t
-                         #:extra-classes "footer__link"
-                         #:extra-attributes '((rel "me")))
-                        (cons (format #f "https://github.com/~a" %username)
-                              "fa-brands fa-github"))))
-    (div (@ (class "footer__wrapper"))
-         "© "
-         (span (@ (class "footer__year")))
-         ,(format #f " ~a" %fullname))))
 
 (define (base-layout site title body)
   `((doctype "html")
@@ -296,8 +269,9 @@ describe my personal projects and contributions.")))))
       ,navbar
       (div (@ (class "body-container"))
            (main (@ (class "main")) ,body)
-           ,footer)
-      ,(script "main")))))
+           (footer (@ (class "footer"))
+                   (div (@ (class "footer__wrapper"))
+                        ,(format #f "© 2024 ~a" %fullname))))))))
 
 
 ;;
@@ -438,22 +412,36 @@ describe my personal projects and contributions.")))))
               ,(post-entries site posts))))
       sxml->html))))
 
+(define (contact-entry title text)
+  `(div (@ (class "descriptions__wrapper"))
+        (dt (@ (class "descriptions__title")) ,title)
+        (dd (@ (class "descriptions__text")) ,text)))
+
 (define contact-page
   (static-page
    "Contact"
    "/contact.html"
    `((h1 (@ (class "main__title")) "Contact me")
      (dl (@ (class "list"))
-      (div (@ (class "descriptions__wrapper"))
-       (dt (@ (class "descriptions__title")) "Email")
-       (dd (@ (class "descriptions__text"))
-           (code "mail") " at " (code "$DOMAIN")))
-      (div (@ (class "descriptions__wrapper"))
-       (dt (@ (class "descriptions__title")) "PGP")
-       (dd (@ (class "descriptions__text"))
-           ,(anchor '(code "4956 DAC8 B077 15EA 9F14  E13A EF1F 69BF 5F23 F458")
-                    (format #f "https://files.~a/pubkey.asc" %domain)
-                    #:external? #t)))))))
+         ,(contact-entry
+           '(span (i (@ (class "fa-brands fa-mastodon footer__icon")))
+                  "Mastodon")
+           `(code
+             ,(anchor
+               (format #f "@~a@fosstodon.org" %username)
+               (format #f "https://fosstodon.org/@~a" %username)
+               #:external? #t
+               #:extra-attributes '((rel "me")))))
+         ,(contact-entry
+           '(span (i (@ (class "fa-solid fa-envelope footer__icon")))
+                  "Email")
+           '(span (code "mail") " at " (code "$DOMAIN")))
+         ,(contact-entry
+           '(span (i (@ (class "fa-solid fa-key footer__icon")))
+                  "PGP")
+           (anchor '(code "4956 DAC8 B077 15EA 9F14  E13A EF1F 69BF 5F23 F458")
+                   (format #f "https://files.~a/pubkey.asc" %domain)
+                   #:external? #t))))))
 
 (define not-found-page
   (static-page
