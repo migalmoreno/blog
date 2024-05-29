@@ -322,7 +322,9 @@ describe my personal projects and contributions.")))))
 
 (define (blog-template site title posts prefix)
   `((div (@ (class "blog"))
-         (h1 (@ (class "main__title")) ,title)
+         (div (@ (class "blog__title"))
+          (h1 (@ (class "main__title")) ,title)
+          ,(anchor '(i (@ (class "fa-solid fa-rss"))) "/feed.xml"))
          ,(post-entries site (posts/reverse-chronological posts)))))
 
 (define (portfolio-template site title projects prefix)
