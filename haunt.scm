@@ -414,14 +414,10 @@ describe my personal projects and contributions.")))))
               ,(format #f "Hi, I'm ~a!"
                        (string-join
                         (drop-right (string-split %fullname #\space) 1))))
-          (p "Software developer currently based in Madrid working in the
-Space Surveillance & Tracking and Space Traffic Management (SST & STM) division at "
-             ,(anchor "GMV" "https://gmv.com" #:external? #t) ".")
-          (p "Particularly interested in functional programming and its
-applications in web development, reproducible operating systems, and
-compilers.")
-          (p "Avid open source contributor and maintainer. Feel free to check
-out some of my " ,(anchor "projects" "/projects") "."))
+          (p "Software developer currently based in Madrid with a strong
+interest in FOSS, functional programming, reproducible systems, and compilers.")
+          (p "Feel free to check out some of my "
+             ,(anchor "projects" "/projects") "."))
          (div (@ (class "blog blog--type-preview"))
               (h2 (@ (class "blog__title")) "Latest Posts"
                   ,(anchor '(button (@ (class "button button--type-border"))
