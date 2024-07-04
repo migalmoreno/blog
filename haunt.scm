@@ -110,16 +110,7 @@
 from these sites and displays it to you in a distraction-free interface along
 with features that are usually locked behind premium subscriptions. Its ultimate
 goal is to offer a full-fledged web-based alternative to "
-         ,(anchor "Newpipe" "https://github.com/TeamNewPipe/NewPipe") ".")
-      (br)
-      (h3 "Tech Stack")
-      (p "Tubo is a Clojure(Script) full-stack application that interops with
-the " ,(anchor "NewPipeExtractor"
-              "https://github.com/TeamNewPipe/NewPipeExtractor") " library.
-Main tools include:")
-      ,(bulleted-list
-        (list "http-kit" "ring" "reitit" "re-frame" "reagent" "promesa"
-              "deps.edn" "shadow-cljs" "webpack" "tailwindcss" "docker"))))
+         ,(anchor "Newpipe" "https://newpipe.net") ".")))
    (project
     #:name "nx-router"
     #:synopsis "A declarative URL routing extension for Nyxt"
@@ -225,7 +216,7 @@ interactive functions along these lines:")
     #:name "guix-config"
     #:synopsis "Personal Guix configuration"
     #:link (project-uri "guix-config")
-    #:tags '("scheme" "rde" "dotfiles")
+    #:tags '("scheme" "dotfiles")
     #:license "GPL-3.0+"
     #:description
     `((p "My personal set of configuration files built on top of Guix and
@@ -239,7 +230,7 @@ packages, services, and features upstream as much as I can.")))
     #:name "blog"
     #:synopsis "Personal site and blog"
     #:link (project-uri "blog")
-    #:tags '("scheme" "org-mode" "haunt")
+    #:tags '("scheme" "org-mode")
     #:license "GPL-3.0+"
     #:description
     `((p "My personal blog built with the "
