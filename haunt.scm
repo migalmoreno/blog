@@ -205,45 +205,7 @@ library to make it easy for others to build their own Nyxt<->Emacs functionality
       (p "For this, it contains a useful helper " (code "nyxt-run") " which launches
 or connects to an existing Nyxt process with a specified Nyxt command.")
       (p "If you're interested in getting data from Nyxt without sending any commands
-through, you can use the " (code "nyxt--sly-eval") " function, and create your own
-interactive functions along these lines:")
-      ,(highlight-code
-        "(defun nyxt-insert-url ()
-  (interactive)
-  (insert (nyxt--sly-eval '(render-url (url (current-buffer))))))"
-        #:lang 'lisp)))
-   (project
-    #:name "guix-config"
-    #:synopsis "Personal Guix configuration"
-    #:link (project-uri "guix-config")
-    #:tags '("scheme" "dotfiles")
-    #:license "GPL-3.0+"
-    #:description
-    `((p "My personal set of configuration files built on top of Guix and
-RDE. The goal is to provide a central point to all my systems, from a
-home/system configuration in my local development machine to a self-hosted setup
-in my personal VPS.")
-      (p "Previously, I used to maintain this repository as a personal Guix
-channel, but over time I found this to be unsustainable, so I now contribute
-packages, services, and features upstream as much as I can.")))
-   (project
-    #:name "blog"
-    #:synopsis "Personal site and blog"
-    #:link (project-uri "blog")
-    #:tags '("scheme" "org-mode")
-    #:license "GPL-3.0+"
-    #:description
-    `((p "My personal blog built with the "
-         ,(anchor "Haunt" "https://dthompson.us/projects/haunt.html")
-         " static site generator, which has allowed me to write the entire site
-as a Guile Scheme program, and "
-         ,(anchor "ox-haunt" "https://git.sr.ht/~jakob/ox-haunt")
-         ", an Org mode export back-end to generate the corresponding HTML
-files for the blog entries.")
-      (p "For the most part, I've followed the Haunt guidelines outlined in its
-manual and use the default utilities, although I've  added a custom "
-         (code "portfolio") " builder to make it more convenient to list and
-describe my personal projects and contributions.")))))
+through, you can just use the " (code "nyxt--sly-eval") " function.")))))
 
 
 ;;
