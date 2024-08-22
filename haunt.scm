@@ -367,10 +367,8 @@ through, you can just use the " (code "nyxt--sly-eval") " function.")))))
               ,(format #f "Hi, I'm ~a!"
                        (string-join
                         (drop-right (string-split %fullname #\space) 1))))
-          (p "Software developer currently based in Madrid with a strong
-interest in FOSS, functional programming, reproducible systems, and compilers.")
-          (p "Feel free to check out some of my "
-             ,(anchor "projects" "/projects") "."))
+          (p "Software developer with a strong interest in FOSS, functional programming,
+reproducible systems, and compilers."))
          (div (@ (class "blog blog--type-preview"))
               (h2 (@ (class "blog__title")) "Latest Posts"
                   ,(anchor '(button (@ (class "button button--type-border"))
@@ -389,15 +387,6 @@ interest in FOSS, functional programming, reproducible systems, and compilers.")
    "/contact.html"
    `((h1 (@ (class "main__title")) "Contact me")
      (dl (@ (class "list"))
-         ,(contact-entry
-           '(span (i (@ (class "fa-brands fa-mastodon footer__icon")))
-                  "Mastodon")
-           `(code
-             ,(anchor
-               (format #f "@~a@fosstodon.org" %username)
-               (format #f "https://fosstodon.org/@~a" %username)
-               #:external? #t
-               #:extra-attributes '((rel "me")))))
          ,(contact-entry
            '(span (i (@ (class "fa-solid fa-envelope footer__icon")))
                   "Email")
