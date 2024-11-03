@@ -40,8 +40,6 @@
 }
 
 * {
-  padding: 0;
-  margin: 0;
   box-sizing: border-box;
 }
 
@@ -51,14 +49,16 @@ body {
   font-family: "Helvetica Neue", Helvetica, sans-serif;
   line-height: 1.7;
   font-size: 18px;
-  margin: 0 6rem;
+  padding: 0;
+  margin: 0;
 }
 
 p {
   padding: 10px 0;
+  font-size: 1rem;
 }
 
-p a:hover {
+a:hover {
   text-decoration: underline;
 }
 
@@ -66,18 +66,48 @@ a {
   text-decoration: none;
 }
 
+ul {
+  margin: 0;
+}
+
+ul:has(+ h2) {
+  margin-bottom: 3rem;
+}
+
+h2 {
+  word-break: break-all;
+}
+
+li {
+  list-style: none;
+}
+
+p {
+  margin: 0;
+}
+
 .main {
   flex: auto;
-  padding: 20px;
   position: relative;
 }
 
 .main__title {
   padding: 10px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .main__anchor {
   color: var(--base0D);
+}
+
+button .main__anchor {
+  text-decoration: none;
+  color: var(--base05);
+  display: block;
+  height: 100%;
+  padding: 10px 15px;
 }
 
 code {
@@ -85,6 +115,10 @@ code {
   color: var(--base0D);
   border-radius: 5px;
   padding: 2px 4px;
+}
+
+pre > code {
+  color: var(--base05);
 }
 
 .list {
@@ -130,32 +164,43 @@ code {
 }
 
 .navbar {
-  height: 120px;
+  height: var(--navbar-height);
   box-sizing: border-box;
   width: 100%;
-  position: relative;
+  position: sticky;
+  top: 0;
   display: flex;
   flex-wrap: nowrap;
-  justify-content: space-between;
+  background: var(--base01);
   align-items: center;
+  border-bottom: 1px solid var(--base02);
+  z-index: 10;
 }
 
 .navbar__images {
-  padding: 20px;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
 }
 
 .navbar__logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   white-space: nowrap;
   font-weight: 600;
 }
 
 .navbar__link {
   text-decoration: none;
-  color: var(--on-bg);
+  color: var(--base05);
+  width: fit-content;
+  display: block;
+}
+
+.navbar__link:hover {
+  text-decoration: none;
 }
 
 .navbar__nav {
@@ -163,10 +208,8 @@ code {
   justify-content: flex-end;
   align-items: center;
   max-height: none;
-  background: var(--bg);
   overflow: hidden;
-  transition: max-height .2s ease-out;
-  z-index: 999;
+  z-index: 20;
 }
 
 .navbar__menu {
@@ -175,7 +218,10 @@ code {
   display: flex;
   list-style: none;
   align-items: center;
-  justify-content: center;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  justify-content: flex-end;
+  padding: 0;
 }
 
 .menu-item {
@@ -206,6 +252,7 @@ code {
   cursor: pointer;
   float: right;
   display: none;
+  padding: 1rem 0.5rem;
 }
 
 .menu-icon {
@@ -223,7 +270,7 @@ code {
   display: block;
   height: 100%;
   position: absolute;
-  transition: all .2s ease-out;
+  transition: all 0.2s ease-out;
   width: 100%;
 }
 
@@ -239,8 +286,8 @@ code {
   display: none;
 }
 
-.navbar__mobile-menu:checked ~ .navbar__nav {
-  max-height: calc(100vh - 80px);
+.navbar__mobile-menu:checked ~ .navbar__menu {
+  max-height: calc(100vh - var(--navbar-height));
 }
 
 .navbar__mobile-menu:checked ~ .navbar__images .menu-icon {
@@ -258,7 +305,7 @@ code {
 }
 
 .body-container {
-  min-height: calc(100vh - 120px);
+  min-height: calc(100vh - var(--navbar-height));
   height: auto;
   max-height: auto;
   display: flex;
@@ -273,13 +320,12 @@ code {
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding: 30px 10px;
   box-sizing: border-box;
 }
 
 .footer__wrapper {
   width: 100%;
-  padding: 10px 0;
+  padding: 4rem 0;
 }
 
 .footer__icon {
@@ -292,12 +338,24 @@ code {
   font-weight: 600;
 }
 
-.hero__title, .portfolio__title, .blog__title {
-  padding: 10px 0px;
+.hero {
+  padding: 30px 0 40px 0;
 }
 
-.codeblock {
-  background: var(--bg-dim);
+.hero__title {
+  padding: 10px 0px;
+  font-size: 3rem;
+}
+
+.hero p {
+  line-height: 2.5rem;
+  font-size: 1.2rem;
+}
+
+.codeblock,
+.src,
+pre {
+  background: var(--base01);
   padding: 15px;
   margin: 10px 0;
   border-radius: 5px;
@@ -306,6 +364,7 @@ code {
   max-width: 100%;
   display: inline-block;
   overflow-x: scroll;
+  font-size: 1rem;
 }
 
 .codeblock__code {
@@ -314,9 +373,16 @@ code {
   border-radius: none;
 }
 
+blockquote {
+  background: var(--base01);
+  padding: 0 1rem;
+  border-left: 4px solid var(--base0D);
+}
+
 .project__subtitle {
   color: var(--base06);
   font-style: italic;
+  margin: 0;
 }
 
 .project__icon {
@@ -384,7 +450,7 @@ figcaption {
 }
 
 .button {
-  font-family: : "Helvetica Neue", Helvetica, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, sans-serif;
 }
 
 .button__icon {
@@ -519,6 +585,10 @@ figcaption {
   color: var(--base05);
 }
 
+.button--type-border:has(a) {
+  padding: 0;
+}
+
 .button--type-border:hover {
   border: 1px solid var(--base04);
   cursor: pointer;
@@ -573,67 +643,59 @@ figcaption {
 }
 
 @media screen and (min-width: 1200px) {
-  main, header {
+  main,
+  .navbar__nav {
     margin: 0 auto;
-    min-width: 70rem;
-    max-width: 70rem;
+    min-width: 60rem;
+    max-width: 60rem;
   }
 }
 
 @media screen and (min-width: 800px) and (max-width: 1200px) {
-  main, header {
-    margin: 0;
-    min-width: 100%;
-    max-width: 100%;
+  main,
+  .navbar__nav {
+    margin: 0 auto;
+    min-width: 80%;
+    max-width: 80%;
   }
 }
 
 @media screen and (max-width: 800px) {
   body {
     font-size: 15px;
-    margin: 0;
   }
 
-  .body-container {
-    min-height: calc(100vh - 80px);
-  }
-
-  .navbar {
-    height: 80px;
-    margin: 0;
-    min-width: 100%;
-    max-width: 100%;
+  .navbar__nav {
+    margin: 0 auto;
+    min-width: 90%;
+    max-width: 90%;
   }
 
   .main {
     padding-top: 0;
-    margin: 0;
-    min-width: 100%;
-    max-width: 100%;
-  }
-
-  .navbar__images {
-    width: 100%;
+    margin: 0 auto;
+    min-width: 90%;
+    max-width: 90%;
   }
 
   .navbar__menu-icon {
     display: block;
   }
 
-  .tag {
-    font-size: 0.6rem;
-  }
-
-  .navbar__nav {
+  .navbar__menu {
     max-height: 0;
     height: 100%;
     width: 100%;
     position: fixed;
-    top: 80px;
+    right: 0;
+    top: var(--navbar-height);
+    flex-direction: column;
+    justify-content: center;
+    background: var(--base01);
   }
 
-  .navbar__menu {
-    flex-direction: column;
+  .navbar__images {
+    width: 100%;
   }
 
   .menu-item {
