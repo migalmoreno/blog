@@ -8,12 +8,14 @@
              (haunt reader)
              (haunt reader commonmark)
              (haunt site)
+             (web uri)
              (ice-9 match)
              (migalmoreno reader dir-tagging)
              (migalmoreno reader org-mode)
              (srfi srfi-1)
              (srfi srfi-19)
-             (portfolio))
+             (srfi srfi-26)
+             (sxml simple))
 
 (define (org-string->date str)
   "Convert STR, a string in Org format, into a SRFI-19 date object."
@@ -107,6 +109,27 @@
 (define %username "migalmoreno")
 (define %fullname "Miguel Ángel Moreno")
 
+(define* (logo
+          #:key
+          (viewBox "0 0 100 100")
+          (fill "var(--base0D)")
+          (height 20)
+          (width 30))
+  `(svg (@ (xmlns "http://www.w3.org/2000/svg")
+           (viewBox ,viewBox)
+           (fill "none")
+           (stroke ,fill)
+           (height ,height)
+           (width ,width)
+           (stroke-width "8")
+           (stroke-linecap "round"))
+        (polyline
+         (@ (fill "none")
+            (points "25,35 10,50 25,65")))
+        (line (@ (x1 "60") (y1 "20") (x2 "40") (y2 "80")))
+        (polyline
+         (@ (fill "none")
+            (points "75,35 90,50 75,65")))))
 
 
 ;;
@@ -115,14 +138,15 @@
 
 (define navbar
   `(header (@ (class "navbar"))
-           (input (@ (class "navbar__mobile-menu")
-                     (type "checkbox") (id "mobile-menu")))
-           (div (@ (class "navbar__images"))
-                (div (@ (class "navbar__logo"))
-                     ,(anchor %fullname "/" #:extra-classes "navbar__link"))
-                (label (@ (class "navbar__menu-icon") (for "mobile-menu"))
-                       (span (@ (class "menu-icon")))))
            (nav (@ (class "navbar__nav"))
+                (input (@ (class "navbar__mobile-menu")
+                     (type "checkbox") (id "mobile-menu")))
+                (div (@ (class "navbar__images"))
+                     (div (@ (class "navbar__logo"))
+                          ,(logo)
+                          ,%fullname)
+                     (label (@ (class "navbar__menu-icon") (for "mobile-menu"))
+                            (span (@ (class "menu-icon")))))
                 (ul (@ (class "navbar__menu"))
                     ,@(map (lambda (a)
                              `(li (@ (class "menu-item"))
@@ -142,8 +166,16 @@
       (meta (@ (name "viewport")
                (content "width=device-width,initial-scale=1")))
       (title ,(string-append (site-title site) " - " title))
-      ,(stylesheet "main" #:local? #t)
-      ,(stylesheet "https://use.fontawesome.com/releases/v6.3.0/css/all.css"))
+      (link
+       (@ (rel "icon")
+          (type "image/svg+xml")
+          (href ,(string-append
+                  "data:image/svg+xml,"
+                  (uri-encode
+                   (with-output-to-string
+                     (lambda ()
+                       (sxml->xml (logo #:fill "#c4c4c4")))))))))
+      ,(stylesheet "main" #:local? #t))
      (body
       ,navbar
       (div (@ (class "body-container"))
@@ -282,12 +314,10 @@ correct practices. Particularly interested in functional programming."))
    `((h1 (@ (class "main__title")) "Contact me")
      (dl (@ (class "list"))
          ,(contact-entry
-           '(span (i (@ (class "fa-solid fa-envelope footer__icon")))
-                  "Email")
+           '(span "Email")
            '(span (code "mail") " at " (code "$DOMAIN")))
          ,(contact-entry
-           '(span (i (@ (class "fa-solid fa-key footer__icon")))
-                  "PGP")
+           '(span "PGP")
            (anchor '(code "4956 DAC8 B077 15EA 9F14  E13A EF1F 69BF 5F23 F458")
                    (format #f "https://files.~a/pubkey.asc" %domain)
                    #:external? #t))))))
