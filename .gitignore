@@ -1,3 +1,5 @@
 .org-mode-reader-cache
 site
 *.tar.gz
+.direnv
+posts/projects/ordenada.md

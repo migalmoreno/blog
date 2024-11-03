@@ -6,8 +6,11 @@
              (haunt html)
              (haunt post)
              (haunt reader)
+             (haunt reader commonmark)
              (haunt site)
              (ice-9 match)
+             (migalmoreno reader dir-tagging)
+             (migalmoreno reader org-mode)
              (srfi srfi-1)
              (srfi srfi-19)
              (syntax-highlight)
@@ -15,6 +18,14 @@
              (syntax-highlight scheme)
              (syntax-highlight xml)
              (portfolio))
+
+(define (org-string->date str)
+  "Convert STR, a string in Org format, into a SRFI-19 date object."
+  (catch 'misc-error
+    (lambda () (string->date str "<~Y-~m-~d ~a ~H:~M>"))
+    (lambda (key . parameters) (string->date str "<~Y-~m-~d ~a>"))))
+
+(register-metadata-parser! 'date org-string->date)
 
 
 ;;
@@ -58,15 +69,32 @@
                 `(li (@ (class "list-item--type-bulleted")) ,i))
               entries)))
 
-(define (post-entries site posts)
-  `(ul (@ (class "blog__wrapper"))
-    ,@(map (lambda (post)
+(define (blog-entries site posts)
+  (if (> (length posts) 0)
+      (map (lambda (post)
              `(a (@ (class "post-item")
-                    (href ,(post-uri site post)))
+                    (href ,(blog-post-uri post)))
                  (span (@ (class "post-item__title")) ,(post-ref post 'title))
                  (span (@ (class "post-item__date"))
                        ,(date->string* (post-date post)))))
-           posts)))
+           posts)
+      '((p "No blog posts found."))))
+
+(define (portfolio-entries site projects)
+  (map (lambda (project)
+         `(div (@ (class "project-item"))
+               (div (@ (class "project-item__wrapper"))
+                (div (@ (class "project-item__heading"))
+                     (a (@ (class "project-item__title")
+                           (href ,(portfolio-post-uri project)))
+                        ,(post-ref project 'title)))
+                (div (@ (class "project-item__synopsis"))
+                     (span ,(post-ref project 'synopsis))))
+               (ul (@ (class "tags"))
+                   ,@(map (lambda (tag)
+                            `(li (@ (class "tag")) ,tag))
+                          (post-ref project 'tags)))))
+       projects))
 
 (define* (stylesheet name #:key local?)
   `(link (@ (rel "stylesheet")
@@ -78,9 +106,13 @@
   `(script (@ (type "text/javascript")
               (src ,(string-append "/assets/js/" name ".js")))))
 
+(define (post-uri post prefix)
+  (string-append prefix "/" (post-slug post) ".html"))
 
-(define (post-uri site post)
-  (string-append "/posts/" (site-post-slug site post) ".html"))
+(define %blog-prefix "/blog")
+(define %portfolio-prefix "/projects")
+(define (blog-post-uri post) (post-uri post %blog-prefix))
+(define (portfolio-post-uri post) (post-uri post %portfolio-prefix))
 
 
 ;;
@@ -92,120 +124,6 @@
 (define %username "migalmoreno")
 (define %fullname "Miguel Ángel Moreno")
 
-(define (project-uri name)
-  (format #f "https://git.~a/~a" %domain name))
-
-(define %projects
-  (list
-   (project
-    #:name "tubo"
-    #:synopsis "A libre streaming front-end for the web"
-    #:link (project-uri "tubo")
-    #:tags '("clojure" "clojurescript")
-    #:license "AGPL-3.0"
-    #:description
-    `((p "Tubo is a web front-end to many streaming platforms (YouTube,
- SoundCloud, Bandcamp, etc.).")
-      (p "It acts like a privacy-friendly middleman that gathers the content
-from these sites and displays it to you in a distraction-free interface along
-with features that are usually locked behind premium subscriptions. Its ultimate
-goal is to offer a full-fledged web-based alternative to "
-         ,(anchor "Newpipe" "https://newpipe.net") ".")))
-   (project
-    #:name "nx-router"
-    #:synopsis "A declarative URL routing extension for Nyxt"
-    #:link (project-uri "nx-router")
-    #:tags '("common-lisp" "browser")
-    #:license "BSD 3-Clause"
-    #:description
-    `((p "nx-router is a declarative URL routing extension for the "
-         ,(anchor "Nyxt" "https://nyxt.atlas.engineer") " browser.")
-      (p "It offers a convenient wrapper around the built-in request resource
-handling functionality in Nyxt by introducing" (code "router") " objects users
-can include in their configuration to define redirects, blocklists, and resource
-openers with an easy and declarative syntax.")
-      (p "It aims to be simple while staying composable and flexible.
-Routers are defined like this:")
-      ,(highlight-code
-        "(list
-  (make-instance 'router:redirector
-    :name 'fandom
-    :route \"https://([\\w'-]+)\\.fandom.com/wiki/(.*)\"
-    :redirect \"https://breezewiki.com/\\1/wiki/\\2\")
-  (make-instance 'router:blocker
-    :name 'fandom
-    :route (match-domain \"fandom.com\")
-    :instances-builder router:breezewiki-instances-builder
-    :blocklist \".*/search\")
-  (make-instance 'router:opener
-    :name 'fandom
-    :resource \"mpv --video=no ~a\"))"
-        #:lang 'lisp)
-      (p "A particular feature of the redirector router is support for reverse redirects
-so that certain URLs get recorded with their original path, which is useful if
-you don't want to record alternative frontends URLs and potentially deal with
-unmaintained instances in the future.")
-      ,(highlight-code
-        "(make-instance 'router:redirector
-  :route (match-regex \"https://.*google.com/search.*\")
-  :redirect (quri:uri \"http://localhost:5000\")
-  :reverse (quri:uri \"https://www.google.com\"))"
-        #:lang 'lisp)))
-   (project
-    #:name "nx-tailor"
-    #:synopsis "A theme manager for Nyxt"
-    #:link (project-uri "nx-tailor")
-    #:tags '("common-lisp" "browser")
-    #:license  "BSD 3-Clause"
-    #:description
-    `((p "nx-tailor is a theme manager for the "
-         ,(anchor "Nyxt" "https://nyxt.atlas.engineer") " browser. It leverages
-the built-in " (code "nyxt/theme") " library to allow defining multiple themes
-to switch between at browser runtime.")
-      (p "I developed this extension because to this day there's no easy way
-to preview Nyxt themes without restarting the browser and I wanted to bring the
-same REPL-based interactivity to theme development.")
-      (p "Since then, the feature set has grown and it now also supports user-specified
-criteria for theme selection at launch and a timer functionality to
-automatically switch it based on the time of the day.")))
-   (project
-    #:name "nx-mosaic"
-    #:synopsis "A configurable new-buffer page for Nyxt"
-    #:link (project-uri "nx-mosaic")
-    #:tags '("common-lisp" "browser")
-    #:license  "BSD 3-Clause"
-    #:description
-    `((p "nx-mosaic is a highly customizable new-buffer page (startpage) for
-the " ,(anchor "Nyxt" "https://nyxt.atlas.engineer") " browser. It's inspired
-by the " ,(anchor "Tabliss" "https://tabliss.io") " web extension, and aims to
-create a Nyxt-native startpage that you can control to your heart's content
-via a wide array of widgets.")))
-   (project
-    #:name "fdroid.el"
-    #:synopsis "An Emacs interface to the F-Droid package repository"
-    #:link (project-uri "fdroid.el")
-    #:tags '("emacs-lisp" "fdroid")
-    #:license "GPL-3.0+"
-    #:description
-    `((p "fdroid.el is a completion-based interface to work with
-F-Droid packages from Emacs.")
-      (p "Having to deal with Android emulators quite often and needing to
-install packages on initial setup, I developed this library to be able to
-quickly manage F-Droid packages without having to resort to the F-Droid website
-or having to download APKs manually.")))
-   (project
-    #:name "nyxt.el"
-    #:synopsis "A minimal API to interact with Nyxt from Emacs"
-    #:link (project-uri "nyxt.el")
-    #:tags '("emacs-lisp" "nyxt")
-    #:license "GPL-3.0+"
-    #:description
-    `((p "nyxt.el is a minimal API to interact with Nyxt from Emacs. I developed this
-library to make it easy for others to build their own Nyxt<->Emacs functionality.")
-      (p "For this, it contains a useful helper " (code "nyxt-run") " which launches
-or connects to an existing Nyxt process with a specified Nyxt command.")
-      (p "If you're interested in getting data from Nyxt without sending any commands
-through, you can just use the " (code "nyxt--sly-eval") " function.")))))
 
 
 ;;
@@ -229,7 +147,7 @@ through, you can just use the " (code "nyxt--sly-eval") " function.")))))
                                            #:extra-classes "menu-item__link")))
                            '(("Home" . "/")
                              ("Projects" . "/projects")
-                             ("Blog" . "/posts")
+                             ("Blog" . "/blog")
                              ("Contact" . "/contact.html")))))))
 
 
@@ -257,85 +175,63 @@ through, you can just use the " (code "nyxt--sly-eval") " function.")))))
 ;;
 
 (define (post-template post)
-  `((div (@ (class "post__metadata"))
-         (button (@ (class "button button--type-bare"))
-                 (i (@ (class "fa-solid fa-caret-left button__icon")))
-                 (a (@ (href "/posts") (class "button__label")) "Back to posts"))
-         (h1 (@ (class "main__title")) ,(post-ref post 'title))
-         (span (@ (class "post__subtitle")) " on "
-               ,(date->string* (post-date post)))
-         (ul (@ (class "tags"))
-             ,@(map (lambda (tag)
-                      `(li (@ (class "tag"))
-                           (a (@ (href
-                                  ,(string-append "/feeds/tags/" tag ".xml"))
-                                 (class "tag__link"))
-                              ,tag)))
-                    (assq-ref (post-metadata post) 'tags))))
-    (div (@ (class "post__container")) ,(post-sxml post))))
+  `((div (@ (class "post"))
+         (div (@ (class "post__metadata"))
+              (h1 (@ (class "main__title")) ,(post-ref post 'title))
+              (span (@ (class "post__subtitle")) " on "
+                    ,(date->string* (post-date post)))
+              (div (@ (class "project__metadata"))
+                   (ul (@ (class "tags"))
+                       ,@(map (lambda (tag)
+                                `(li (@ (class "tag"))
+                                     (a (@ (href
+                                            ,(string-append "/feeds/tags/"
+                                                            tag ".xml"))
+                                           (class "tag__link"))
+                                        ,tag)))
+                              (post-ref post 'tags)))))
+         (div (@ (class "post__container")) ,(post-sxml post)))))
 
 (define (project-template project)
-  `((div (@ (class "project"))
-         (button (@ (class "button--type-bare"))
-                 (i (@ (class "fa-solid fa-caret-left button__icon")))
-                 (a (@ (href "/projects") (class "button__label"))
-                    "Back to projects"))
-         (h1 ,(project-name project))
-         (h4 (@ (class "project__subtitle")) ,(project-synopsis project))
+  `((div (@ (class "post project"))
+         (h1 (@ (class "main__title")) ,(post-ref project 'title))
+         (h4 (@ (class "project__subtitle")) ,(post-ref project 'synopsis))
          (div (@ (class "project__metadata"))
+              (ul (@ (class "tags"))
+                  ,@(map (lambda (tag)
+                           `(li (@ (class "tag")) ,tag))
+                         (post-ref project 'tags)))
               (span (@ (class "project__metadata-items"))
-                    (i (@ (class "fa-brands fa-git-alt project__icon")))
-                    ,(anchor (project-link project)
-                             (string-append (project-link project) "/about")
+                    ,(anchor (post-ref project 'link)
+                             (post-ref project 'link)
                              #:external? #t
                              #:extra-classes "project__link"))
-              (span (@ (classs "project__metadata-items"))
-                    (i (@ (class "fa-solid fa-file-lines project__icon")))
-                    ,(project-license project)))
-         (ul (@ (class "tags"))
-             ,@(map (lambda (tag)
-                      `(li (@ (class "tag")) ,tag)) (project-tags project)))
+              (span (@ (class "project__metadata-items project__license"))
+                    ,(post-ref project 'license)))
          (div (@ (class "project__container"))
-                ,@(project-description project)))))
+              ,@(post-sxml project)))))
 
 (define (blog-template site title posts prefix)
   `((div (@ (class "blog"))
-         (div (@ (class "blog__title"))
-          (h1 (@ (class "main__title")) ,title)
-          ,(anchor '(i (@ (class "fa-solid fa-rss"))) "/feed.xml"))
-         ,(post-entries site (posts/reverse-chronological posts)))))
+         (div (@ (class "main__title"))
+              (h1 (@ (class "blog__title")) ,title)
+              (button (@ (class "button button--type-border"))
+                      ,(anchor "Feed" "/feed.xml")))
+         (div (@ (class "blog-entries"))
+              ,@(blog-entries site (posts/reverse-chronological posts))))))
 
 (define (portfolio-template site title projects prefix)
-  (define (project-uri project)
-    (string-append (or prefix "") "/" (project-name project) ".html"))
-
-  `((h1 (@ (class "portfolio__title")) ,title)
-    (div (@ (class "portfolio"))
-         ,@(map (lambda (project)
-                  `(div (@ (class "project-item"))
-                      (div (@ (class "project-item__heading"))
-                           (div
-                            (a (@ (class "project-item__title")
-                                  (href ,(project-uri project)))
-                               ,(project-name project)))
-                           (div
-                            ,(anchor '(i (@ (class "fa-brands fa-git-alt")))
-                                     (string-append (project-link project)
-                                                    "/about")
-                                     #:external? #t)))
-                      (ul (@ (class "tags"))
-                          ,@(map (lambda (tag)
-                                   `(li (@ (class "tag")) ,tag))
-                                 (project-tags project)))
-                      (p (@ (class "project-item__synopsis"))
-                         ,(project-synopsis project))))
-                projects))))
+  `((div (@ (class "portfolio"))
+         (div (@ (class "main__title"))
+              (h1 (@ (class "portfolio__title")) ,title))
+         (div (@ (class "portfolio-entries"))
+              ,@(portfolio-entries site projects)))))
 
 (define %blog-collections
-  `(("Blog" "posts/index.html" ,posts/reverse-chronological)))
+  `(("Blog" ,(format #f "~a/index.html" %blog-prefix) ,posts/reverse-chronological)))
 
 (define %portfolio-collections
-  `(("Projects" "index.html")))
+  `(("Projects" ,(format #f "~a/index.html" %portfolio-prefix) ,identity)))
 
 (define %blog-theme
   (theme #:name %username
@@ -344,10 +240,10 @@ through, you can just use the " (code "nyxt--sly-eval") " function.")))))
          #:collection-template blog-template))
 
 (define %portfolio-theme
-  (portfolio-theme #:name %username
-                   #:layout base-layout
-                   #:project-template project-template
-                   #:collection-template portfolio-template))
+  (theme #:name %username
+         #:layout base-layout
+         #:post-template project-template
+         #:collection-template portfolio-template))
 
 
 ;;
@@ -364,16 +260,31 @@ through, you can just use the " (code "nyxt--sly-eval") " function.")))))
        `((div
           (@ (class "hero"))
           (h1 (@ (class "hero__title"))
-              ,(format #f "Hi, I'm ~a!"
+              ,(format #f "Hi, I'm ~a"
                        (string-join
                         (drop-right (string-split %fullname #\space) 1))))
-          (p "Software developer with a strong interest in FOSS, functional programming,
-reproducible systems, and compilers."))
+          (p "Software developer with experience in project settings across
+different industries. Enthusiastic about building robust solutions following
+correct practices. Particularly interested in functional programming."))
          (div (@ (class "blog blog--type-preview"))
               (h2 (@ (class "blog__title")) "Latest Posts"
-                  ,(anchor '(button (@ (class "button button--type-border"))
-                                    "See all") "/posts"))
-              ,(post-entries site posts))))
+                  (button (@ (class "button button--type-border"))
+                          ,(anchor "See all" "/blog")))
+              (div (@ (class "blog-entries"))
+                   ,(blog-entries site
+                                  (remove (lambda (post)
+                                            (post-ref post 'projects))
+                                          posts))))
+         (div (@ (class "portfolio portfolio--type-preview"))
+              (h2 (@ (class "portfolio__title")) "Projects"
+                  (button (@ (class "button button--type-border"))
+                          ,(anchor "See all" "/projects")))
+              (div (@ (class "portfolio-entries"))
+                   ,@(portfolio-entries site
+                                        (take (filter (lambda (post)
+                                                          (post-ref post 'projects))
+                                                      posts)
+                                              6))))))
       sxml->html))))
 
 (define (contact-entry title text)
@@ -406,22 +317,35 @@ reproducible systems, and compilers."))
           (h1 "404")
           (h1 "Not Found")))))
 
+(define (portfolio)
+  (define portfolio-blog
+    (blog #:prefix %portfolio-prefix
+          #:theme %portfolio-theme
+          #:collections %portfolio-collections))
+  (lambda (site posts)
+    (portfolio-blog site
+                    (filter (lambda (post) (post-ref post 'projects)) posts))))
+
+(define (make-builder-with-blog-posts builder)
+  (lambda (site posts)
+    (builder site (remove (lambda (post) (post-ref post 'projects)) posts))))
+
 (site #:title %fullname
       #:domain %domain
       #:default-metadata
       `((author . ,%fullname)
         (email . ,%email))
-      #:readers (list html-reader)
+      #:readers (list (make-dir-tagging-reader html-reader)
+                      (make-dir-tagging-reader org-mode-reader)
+                      (make-dir-tagging-reader commonmark-reader))
       #:builders (list index-page
-                       (portfolio #:prefix "/projects"
-                                  #:theme %portfolio-theme
-                                  #:projects %projects
-                                  #:collections %portfolio-collections)
-                       (blog #:prefix "/posts"
-                             #:theme %blog-theme
-                             #:collections %blog-collections)
+                       (portfolio)
+                       (make-builder-with-blog-posts
+                        (blog #:prefix %blog-prefix
+                              #:theme %blog-theme
+                              #:collections %blog-collections))
                        contact-page
                        not-found-page
-                       (atom-feed)
-                       (atom-feeds-by-tag)
+                       (make-builder-with-blog-posts (atom-feed))
+                       (make-builder-with-blog-posts (atom-feeds-by-tag))
                        (static-directory "assets")))

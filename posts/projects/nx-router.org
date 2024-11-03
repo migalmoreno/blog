@@ -1,0 +1,8 @@
+#+TITLE: nx-router
+#+SYNOPSIS: A declarative URL routing extension for Nyxt
+#+LINK: https://git.migalmoreno.com/nx-router
+#+TAGS: common-lisp browser
+#+LICENSE: BSD 3-Clause
+nx-router is a declarative URL routing extension for the [[https://nyxt.atlas.engineer][Nyxt]] browser. It offers a convenient wrapper around the built-in request resource handling functionality in Nyxt by introducing =router= objects users can include in their configuration to define redirects, blocklists, and resource openers with an easy and declarative syntax.
+
+A particular feature of the redirector router is support for reverse redirects so that certain URLs get recorded with their original path, which is useful if you don't want to record alternative front-ends URLs and potentially deal with unmaintained instances in the future.

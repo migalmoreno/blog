@@ -1,0 +1,12 @@
+#+TITLE: nyxt.el
+#+SYNOPSIS: A minimal API to interact with Nyxt from Emacs
+#+LINK: https://git.migalmoreno.com/nyxt.el
+#+TAGS: emacs-lisp nyxt
+#+LICENSE: GPL-3.0+
+nyxt.el is a minimal API to interact with Nyxt from Emacs. I developed this
+library to make it easy for others to build their own Nyxt<->Emacs functionality.
+
+For this, it contains a useful helper =nyxt-run= which launches or connects to an existing Nyxt process with a specified Nyxt command.
+
+If you're only interested in getting data from Nyxt without sending any commands
+through, you can use the =nyxt--sly-eval= internal function.

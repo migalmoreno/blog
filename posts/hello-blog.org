@@ -1,0 +1,6 @@
+#+title: Hello, blog!
+#+date: <2023-01-22 Sun 19:13>
+#+TAGS: haunt guile org-mode
+This is my first public blog entry. Over the years, I always meant to set up a personal blog to document some of my findings and share topics that I found useful with other people. I came close to publishing one around a year ago when I followed the example [[https://nextjs.org][NextJS]] tutorial to get to grips with it. Ultimately, though, I found the need for a JavaScript framework to handle static pages overly complex and put a hold on the project.
+
+Right around that time I became really invested into the [[https://guix.gnu.org][GNU Guix]] project, and began porting my entire configuration to it, and while I was becoming more comfortable with [[https://www.gnu.org/software/guile/][GNU Guile]], the scripting language used for this project, I came across [[https://dthompson.us/projects/haunt.html][Haunt]]. I was immediately hooked and became really fond of the minimalist approach it encourages, allowing you to write your entire site in Scheme.

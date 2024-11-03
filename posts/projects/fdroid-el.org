@@ -1,0 +1,8 @@
+#+LICENSE: GPL-3.0+
+#+TAGS: emacs-lisp emacs
+#+SYNOPSIS: An Emacs interface to the F-Droid package repository
+#+LINK: https://git.migalmoreno.com/fdroid.el
+#+TITLE: fdroid.el
+fdroid.el is a completion-based interface to work with F-Droid packages from Emacs.
+
+Having to deal with Android emulators quite often and needing to install packages on initial setup, I developed this library to be able to quickly manage F-Droid packages without having to resort to the F-Droid website or having to download APKs manually.
