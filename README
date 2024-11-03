@@ -1,4 +1,10 @@
 # -*- mode: org; org-html-head-include-default-style: nil; org-html-postamble: nil;  -*-
 #+OPTIONS: toc:nil num:nil
 * Blog
-Built with the [[https://dthompson.us/projects/haunt.html][Haunt]] static site generator and the [[https://git.sr.ht/~jakob/ox-haunt][ox-haunt]] Org export back-end.
+This is my personal blog built with the [[https://dthompson.us/projects/haunt.html][Haunt]] static site generator.
+
+To build the whole site, do this:
+
+#+begin_src sh
+nix develop
+#+end_src
