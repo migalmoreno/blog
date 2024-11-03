@@ -1,4 +1,5 @@
 .org-mode-reader-cache
+.dir-locals.el
 site
 *.tar.gz
 .direnv
