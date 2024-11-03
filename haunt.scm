@@ -319,7 +319,7 @@ correct practices. Particularly interested in functional programming."))
          ,(contact-entry
            '(span "PGP")
            (anchor '(code "4956 DAC8 B077 15EA 9F14  E13A EF1F 69BF 5F23 F458")
-                   (format #f "https://files.~a/pubkey.asc" %domain)
+                   "/assets/pubkey.asc"
                    #:external? #t))))))
 
 (define not-found-page
