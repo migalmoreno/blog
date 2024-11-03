@@ -13,10 +13,6 @@
              (migalmoreno reader org-mode)
              (srfi srfi-1)
              (srfi srfi-19)
-             (syntax-highlight)
-             (syntax-highlight lisp)
-             (syntax-highlight scheme)
-             (syntax-highlight xml)
              (portfolio))
 
 (define (org-string->date str)
@@ -31,19 +27,6 @@
 ;;
 ;; Components/Utilities
 ;;
-
-(define* (highlight-code code #:key (lang 'scheme))
-  (let ((lexer (match lang
-                 ('scheme lex-scheme)
-                 ('lisp lex-lisp)
-                 ('xml lex-xml)
-                 ('c lex-c)
-                 (_ #f))))
-    (if lexer
-        `(pre (@ (class "codeblock"))
-              (code (@ (class "codeblock__code"))
-                    ,(highlights->sxml (highlight lexer code))))
-        code)))
 
 (define (static-page title filename body)
   (lambda (site posts)

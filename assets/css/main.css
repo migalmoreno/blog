@@ -343,27 +343,6 @@ code  {
   color: var(--accent);
 }
 
-.syntax-special, .syntax-element {
-    color: #8ac6f2;
-    font-weight: bold;
-}
-
-.syntax-string {
-  color: var(--slate);
-}
-
-.syntax-keyword, .syntax-attribute {
-  color: var(--maroon);
-}
-
-.syntax-comment {
-    color: #999;
-}
-
-.syntax-open, .syntax-close {
-    color: #999;
-}
-
 .post__image {
   border-radius: 5px;
 }
