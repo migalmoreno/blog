@@ -59,7 +59,8 @@
       (map (lambda (post)
              `(a (@ (class "post-item")
                     (href ,(blog-post-uri post)))
-                 (span (@ (class "post-item__title")) ,(post-ref post 'title))
+                 (span (@ (class "post-item__title"))
+                       ,(post-title post))
                  (span (@ (class "post-item__date"))
                        ,(date->string* (post-date post)))))
            posts)
@@ -72,7 +73,7 @@
                 (div (@ (class "project-item__heading"))
                      (a (@ (class "project-item__title")
                            (href ,(portfolio-post-uri project)))
-                        ,(post-ref project 'title)))
+                        ,(post-title project)))
                 (div (@ (class "project-item__synopsis"))
                      (span ,(post-ref project 'synopsis))))
                (ul (@ (class "tags"))
@@ -192,11 +193,11 @@
 
 (define (post-template post)
   `((div (@ (class "post"))
+         (h1 (@ (class "main__title")) ,(post-title post))
          (div (@ (class "post__metadata"))
-              (h1 (@ (class "main__title")) ,(post-ref post 'title))
-              (span (@ (class "post__subtitle")) " on "
-                    ,(date->string* (post-date post)))
-              (div (@ (class "project__metadata"))
+              (div (@ (class "post__metadata-items"))
+                   (span (@ (class "post__subtitle"))
+                         ,(date->string* (post-date post)))
                    (ul (@ (class "tags"))
                        ,@(map (lambda (tag)
                                 `(li (@ (class "tag"))
@@ -210,20 +211,27 @@
 
 (define (project-template project)
   `((div (@ (class "post project"))
-         (h1 (@ (class "main__title")) ,(post-ref project 'title))
-         (h4 (@ (class "project__subtitle")) ,(post-ref project 'synopsis))
-         (div (@ (class "project__metadata"))
-              (ul (@ (class "tags"))
-                  ,@(map (lambda (tag)
-                           `(li (@ (class "tag")) ,tag))
-                         (post-ref project 'tags)))
-              (span (@ (class "project__metadata-items"))
-                    ,(anchor (post-ref project 'link)
-                             (post-ref project 'link)
-                             #:external? #t
-                             #:extra-classes "project__link"))
-              (span (@ (class "project__metadata-items project__license"))
-                    ,(post-ref project 'license)))
+         (h1 (@ (class "main__title")) ,(post-title project))
+         (div (@ (class "post__metadata"))
+              (div (@ (class "post__metadata-items"))
+                   ,(anchor "GitHub"
+                            (format #f "https://github.com/~a/~a"
+                                    %username (post-title project))
+                            #:external? #t
+                            #:extra-classes "project__link")
+                   ,(anchor "Cgit"
+                            (format #f "https://git.~a/~a"
+                                    %domain (post-title project))
+                            #:external? #t
+                            #:extra-classes "project__link")
+                   ,(post-ref project 'license))
+              (div (@ (class "post__metadata-items"))
+                   (h4 (@ (class "post__subtitle"))
+                       ,(post-ref project 'synopsis))
+                   (ul (@ (class "tags"))
+                       ,@(map (lambda (tag)
+                                `(li (@ (class "tag")) ,tag))
+                              (post-ref project 'tags)))))
          (div (@ (class "project__container"))
               ,@(post-sxml project)))))
 
