@@ -630,6 +630,33 @@ figcaption {
   flex-direction: column;
 }
 
+div[id*="container-ordenada"] {
+  margin-bottom: 3rem;
+}
+
+div[id*="container-ordenada"] code {
+  color: var(--base05);
+}
+
+div[id*="container-ordenada"] p:has(i):has(code) {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+div[id*="container-ordenada"] p:has(i):has(a) {
+  color: var(--base00);
+}
+
+div[id*="container-ordenada"] p:has(i):has(a) > i {
+  color: var(--base05);
+}
+
+div[id*="container-ordenada"] p:has(i):has(a) > a {
+  display: flex;
+  word-break: break-all;
+}
+
 @media screen and (min-width: 1200px) {
   main,
   .navbar__nav {
