@@ -1,0 +1,3 @@
+#+SYNOPSIS: A minimal API to interact with Nyxt from Emacs
+#+TAGS: emacs-lisp nyxt
+#+LICENSE: GPL-3.0+

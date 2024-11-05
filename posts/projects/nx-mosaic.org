@@ -1,6 +1,0 @@
-#+TITLE: nx-mosaic
-#+SYNOPSIS: A configurable new-buffer page for Nyxt
-#+LINK: https://git.migalmoreno.com/nx-mosaic
-#+TAGS: common-lisp browser
-#+LICENSE: BSD 3-Clause
-nx-mosaic is a highly customizable new-buffer page (startpage) for the [[https://nyxt.atlas.engineer][Nyxt]] browser. It's inspired by the [[https://tabliss.io][Tabliss]] web extension and aims to create a Nyxt-native startpage that you can control to your heart's content through a wide array of widgets.

@@ -3,14 +3,15 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     systems.url = "github:nix-systems/default";
     ordenada.url = "github:migalmoreno/ordenada";
+    tubo.url = "github:migalmoreno/tubo";
+    nx-router.url = "github:migalmoreno/nx-router";
+    nx-tailor.url = "github:migalmoreno/nx-tailor";
+    nx-mosaic.url = "github:migalmoreno/nx-mosaic";
+    fdroid-el.url = "github:migalmoreno/fdroid.el";
+    nyxt-el.url = "github:migalmoreno/nyxt.el";
   };
   outputs =
-    {
-      nixpkgs,
-      systems,
-      ordenada,
-      ...
-    }:
+    inputs@{ nixpkgs, systems, ... }:
     let
       eachSystem =
         f: nixpkgs.lib.genAttrs (import systems) (system: f (import nixpkgs { inherit system; }));
@@ -22,16 +23,40 @@
             haunt
             guile
             (emacs.pkgs.withPackages (epkgs: epkgs.htmlize))
-            ordenada.packages.${system}.default
           ];
-          shellHook = ''
-            tmpdir=$(mktemp -d)
-            cat ${./projects/ordenada.md} ${
-              ordenada.packages.${pkgs.system}.default
-            }/index.md > $tmpdir/ordenada.md
-            ln -sf $tmpdir/ordenada.md ./posts/projects/ordenada.md
-            haunt build
-          '';
+          shellHook =
+            let
+              projects = [
+                "ordenada"
+                "tubo"
+                "nx-router"
+                "nx-tailor"
+                "nx-mosaic"
+                "fdroid-el"
+                "nyxt-el"
+              ];
+            in
+            ''
+              tmpdir=$(mktemp -d)
+              ${toString (
+                map (name: ''
+                  cat ${./projects/${name}.org} ${
+                    if
+                      pkgs.lib.hasAttrByPath [
+                        "packages"
+                        pkgs.system
+                        "docs"
+                      ] inputs.${name}
+                    then
+                      "${inputs.${name}.packages.${pkgs.system}.docs}/index.org"
+                    else
+                      "${inputs.${name}}/README"
+                  } > $tmpdir/${name}.org
+                  ln -sf $tmpdir/${name}.org ./posts/projects/${name}.org
+                '') projects
+              )}
+              haunt build
+            '';
         };
       });
     };

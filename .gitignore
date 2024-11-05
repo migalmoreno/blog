@@ -3,4 +3,4 @@
 site
 *.tar.gz
 .direnv
-posts/projects/ordenada.md
+posts/projects/*

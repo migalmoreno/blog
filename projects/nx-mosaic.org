@@ -1,0 +1,3 @@
+#+SYNOPSIS: A configurable new-buffer page for Nyxt
+#+TAGS: common-lisp browser
+#+LICENSE: BSD 3-Clause

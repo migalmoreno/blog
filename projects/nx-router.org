@@ -1,0 +1,3 @@
+#+SYNOPSIS: A declarative URL routing extension for Nyxt
+#+TAGS: common-lisp browser
+#+LICENSE: BSD 3-Clause

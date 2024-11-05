@@ -1,0 +1,3 @@
+#+SYNOPSIS: A reproducible development environment for Nix
+#+TAGS: nix linux
+#+LICENSE: GPL-3.0+

@@ -1,8 +1,0 @@
-#+title: tubo
-#+SYNOPSIS: A libre streaming front-end for the web
-#+LINK: https://git.migalmoreno.com/tubo
-#+TAGS: clojure clojurescript
-#+LICENSE: AGPL-3.0
-Tubo is a web front-end to many streaming platforms (YouTube, SoundCloud, Bandcamp, etc.).
-
-It acts like a privacy-friendly middleman that gathers the content from these sites and displays it to you in a distraction-free interface along with features that are usually locked behind premium subscriptions. Its ultimate goal is to offer a full-fledged web-based alternative to [[https://newpipe.net][NewPipe]].
