@@ -361,6 +361,77 @@ pre {
   border-radius: none;
 }
 
+.org-comment-delimiter,
+.org-comment {
+  color: var(--fg-dim);
+}
+
+span[class*="keyword"],
+.org-keyword {
+  color: var(--magenta-cooler);
+}
+
+.org-negation-char {
+  color: var(--red);
+}
+
+.org-function-name {
+  color: var(--magenta);
+}
+
+.org-preprocessor,
+.org-builtin,
+span[class*="builtin"] {
+  color: var(--magenta-warmer);
+}
+
+.org-rainbow-delimiters-depth-1 {
+  color: var(--fg-main);
+}
+
+.org-rainbow-delimiters-depth-2 {
+  color: var(--magenta-intense);
+}
+
+.org-rainbow-delimiters-depth-3 {
+  color: var(--cyan-intense);
+}
+
+.org-rainbow-delimiters-depth-4 {
+  color: var(--red-warmer);
+}
+
+.org-rainbow-delimiters-depth-5 {
+  color: var(--yellow-intense);
+}
+
+.org-rainbow-delimiters-depth-6 {
+  color: var(--magenta--cooler);
+}
+
+.org-rainbow-delimiters-depth-7 {
+  color: var(--green-intense);
+}
+
+.org-rainbow-delimiters-depth-8 {
+  color: var(--blue-warmer);
+}
+
+.org-rainbow-delimiters-depth-9 {
+  color: var(--magenta-warmer);
+}
+
+.org-doc,
+.org-doc-string,
+.org-string {
+  color: var(--blue-warmer);
+}
+
+.src span[class*="attribute"],
+.org-variable-name {
+  color: var(--cyan-intense);
+}
+
 blockquote {
   background: var(--bg-dim);
   padding: 10px;
