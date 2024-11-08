@@ -618,10 +618,12 @@
         "systems": "systems_8"
       },
       "locked": {
-        "lastModified": 1730713032,
-        "narHash": "sha256-PdgsMokiNYFieDi4KpTAstijM11hLBxopndp2FDjudo=",
-        "path": "/home/vega/src/work/ordenada",
-        "type": "path"
+        "lastModified": 1731083616,
+        "narHash": "sha256-BU2qdXQdF1qp2+cdrmLsAVV2I7x+r3JoydjAQfvL+18=",
+        "owner": "migalmoreno",
+        "repo": "ordenada",
+        "rev": "d49b670e8d64673bb64eb6d9d67f7e8035dcf10f",
+        "type": "github"
       },
       "original": {
         "owner": "migalmoreno",
@@ -845,11 +847,11 @@
         "systems": "systems_10"
       },
       "locked": {
-        "lastModified": 1730765891,
-        "narHash": "sha256-6NdFJ/ETiQaW3Sftaqjop5v4VlPnDldr5IDM8m5bCVs=",
+        "lastModified": 1731083696,
+        "narHash": "sha256-WYCfIc/NROf9/4JCt8dX08GO/rEKV+U5JPvLMqythe4=",
         "owner": "migalmoreno",
         "repo": "tubo",
-        "rev": "b6783eb780ffb64cb9c9c9c338caf6c7465f93f9",
+        "rev": "e4a7f293c77fa2131b06969a7f269a25299d1d3d",
         "type": "github"
       },
       "original": {
