@@ -39,6 +39,10 @@
 (define %use-emacsclient
   (make-parameter (getenv "HAUNT_ORG_READER_USE_EMACSCLIENT")))
 
+;; Name of the Emacs daemon where to evaluate elisp forms if using a running Emacs daemon
+(define %emacs-daemon-name
+  (make-parameter (getenv "HAUNT_ORG_READER_EMACS_DAEMON_NAME")))
+
 (define (eval-in-emacs form)
   "Evaluate s-exp FORM in Emacs and return the result
 
@@ -58,7 +62,11 @@ daemon. Assumes that FORM does not write to `standard-output'."
                    form))
          (stringified (call-with-output-string (cut write form <>)))
          (port       (if (%use-emacsclient)
-                         (open-pipe* OPEN_READ "emacsclient" "-e" stringified)
+                         (apply open-pipe* OPEN_READ "emacsclient"
+                                `(,@(if (%emacs-daemon-name)
+                                        (list "-s" (%emacs-daemon-name))
+                                        '())
+                                  "-e" ,stringified))
                          (open-pipe* OPEN_READ "emacs" "--batch" "--eval" stringified)))
          (result     (read port))
          ;; The symbol `nil' doesn't have the same semantics in Scheme, so we'll
