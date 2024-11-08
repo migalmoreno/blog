@@ -54,7 +54,6 @@ body {
 }
 
 a {
-  text-decoration: none;
   word-break: break-word;
 }
 
@@ -145,7 +144,6 @@ code {
 }
 
 .post__container a {
-  text-decoration: none;
   color: var(--blue-warmer);
 }
 
@@ -507,6 +505,7 @@ figcaption {
   font-weight: bold;
   font-size: 1.3rem;
   color: var(--blue-warmer);
+  text-decoration: none;
 }
 
 .project-item__title:hover {
@@ -540,6 +539,7 @@ figcaption {
 
 .tag__link {
   color: var(--fg-dim);
+  text-decoration: none;
 }
 
 .tag__link:hover {
