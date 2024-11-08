@@ -386,7 +386,7 @@ blockquote p {
 .post__metadata-items {
   white-space: nowrap;
   display: flex;
-  gap: 0.5rem 1rem;
+  gap: 1rem;
   font-weight: 500;
   flex-wrap: wrap;
 }
