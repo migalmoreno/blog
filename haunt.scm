@@ -113,7 +113,7 @@
 (define* (logo
           #:key
           (viewBox "0 0 100 100")
-          (fill "var(--base0D)")
+          (fill "var(--blue-warmer)")
           (height 20)
           (width 20))
   `(svg (@ (xmlns "http://www.w3.org/2000/svg")
