@@ -33,7 +33,7 @@
 
 ;; Additional Org-mode keywords to include in the extracted metadata.
 (define %additional-keys
-  (make-parameter '("CROSSPOST" "SCRIPTS" "META-TAGS" "LICENSE" "LINK" "SYNOPSIS")))
+  (make-parameter '("CROSSPOST" "SCRIPTS" "META-TAGS" "LICENSE" "SYNOPSIS")))
 
 ;; Whether to use a running Emacs daemon to evaluate elisp forms.
 (define %use-emacsclient
