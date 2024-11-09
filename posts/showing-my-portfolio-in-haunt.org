@@ -1,4 +1,4 @@
-#+title: Showing a portfolio in Haunt
+#+title: Showing my portfolio in Haunt
 #+date: <2024-11-08 Fri 17:56>
 #+tags: guile haunt nix org-mode
 #+OPTIONS: toc:nil num:nil
