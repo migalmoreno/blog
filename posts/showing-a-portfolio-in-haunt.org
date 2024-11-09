@@ -1,0 +1,233 @@
+#+title: Showing a portfolio in Haunt
+#+date: <2024-11-08 Fri 17:56>
+#+tags: guile haunt nix org-mode
+#+OPTIONS: toc:nil num:nil
+This blog post documents the journey to display my portfolio inside of this blog ([[https://github.com/migalmoreno/blog][GitHub]], [[https://git.migalmoreno.com/blog][Cgit]]) using [[https://dthompson.us/projects/haunt.html][Haunt]] and [[https://nixos.org/][Nix]]. For the longest time, I wanted my website to be the homepage and single source of truth for each of my projects so I didn't have to rely on source forges to present them, and being able to render the upstream project's documentation was a key component to making this a reality.
+
+When I first started using Haunt, I made an initial attempt similar to [[https://git.dthompson.us/blog/tree/projects.scm][David Thompson's projects pages]] that allowed me to showcase my projects in a separate page from my blog posts. My implementation involved adding a custom =portfolio= [[https://files.dthompson.us/docs/haunt/latest/Builders.html][builder]] (based on the [[https://files.dthompson.us/docs/haunt/latest/Blog.html][blog builder]]) which would grab a list of =project= Scheme records and create a list of posts and collections based on them, also taking a layout and template to dictate how to style the portfolio pages. This approach came with downsides, though, as it meant I had to specify my projects metadata inside of the =haunt.scm= file. At first, I considered it acceptable for simple information like the project title, license, tags, etc. but in the long run it became a burden, specially when it came to editing the markup of the project page because I had to manually write the SXML (S-expression equivalent of XML) and I couldn't concentrate on the actual content of the project pages.
+
+This led me to start thinking of alternative ways to show my list of projects in a more seamless way. Thanks to [[https://github.com/Tass0sm/Tass0sm.github.io][Tassos']] blog, I realized that the representation of project pages could be thought of mostly the same as blog post pages, so I opted to leverage the [[https://files.dthompson.us/docs/haunt/latest/Blog.html][blog builder]] to create a wrapper that returns a procedure with the blog builder and a filtered list of posts with only those containing the =projects= tag.
+
+#+begin_src scheme
+(define (portfolio)
+  (define portfolio-blog
+    (blog #:prefix %portfolio-prefix
+          #:theme %portfolio-theme
+          #:collections %portfolio-collections))
+  (lambda (site posts)
+    (portfolio-blog site
+                    (filter (lambda (post) (post-ref post 'projects))
+                            posts))))
+#+end_src
+
+This meant I could reuse all the goodies from the =blog= builder to specify the portfolio =theme= and =collections= to give these pages a unique look and feel.
+
+Markup documents in Haunt have a single source of truth which is the =./posts= directory, so the above implementation requires project pages to be specified inside that directory. However, to differentiate them from blog post pages we need to add a =projects= metadata item to them. Since manually doing this for every project page would be a burden, I added [[https://github.com/Tass0sm/Tass0sm.github.io/blob/master/haunt/reader/dir-tagging-reader.scm][Tassos' dir-tagging-reader]] which expects a reader procedure and adds a metadata item with the list of sub-directories a file is located under (relative to =./posts=) for every file the reader processes. Then, you need to add this for every reader you want the feature to apply to:
+
+#+begin_src scheme
+#:readers (list (make-dir-tagging-reader html-reader)
+                (make-dir-tagging-reader org-mode-reader)
+                (make-dir-tagging-reader commonmark-reader))
+#+end_src
+
+To not affect the existing =blog= builder, as well as the =atom-feed*= builders (which I want only to display entries for blog posts), I added the following procedure:
+
+#+begin_src scheme
+(define (make-builder-with-blog-posts builder)
+  (lambda (site posts)
+    (builder site (remove (lambda (post) (post-ref post 'projects))
+                          posts))))
+#+end_src
+
+And wrapped the existing builders like this:
+
+#+begin_src scheme
+#:builders (list
+            (make-builder-with-blog-posts
+             (blog #:prefix %blog-prefix
+                   #:theme %blog-theme
+                   #:collections %blog-collections))
+            (make-builder-with-blog-posts (atom-feed))
+            (make-builder-with-blog-posts (atom-feeds-by-tag)))
+#+end_src
+
+With this in place, I could include project files under =./posts/projects/= and they would all be displayed in a separate page under =%portfolio-prefix= (=/projects= in my case), where a link in each project item would take you to the project page, which would contain the project title, synopsis, tags, and documentation as markup.
+
+* Org Mode for Project Documentation Markup
+Another gripe of mine was that I didn't want to rely on the existing [[https://files.dthompson.us/docs/haunt/latest/Readers.html][Haunt readers]] to build the projects documentation since all my project =README= files are written in [[https://orgmode.org/][Org Mode]]. Previously, I had been using the [[https://git.sr.ht/~jakob/ox-haunt][ox-haunt]] Emacs package to export my Org notes to HTML to be ingested by Haunt's =html-reader= and automatically add them under the =./posts= directory of my local blog checkout. However, I saw the recent notice in the project's =README= which presented this [[https://git.sr.ht/~jakob/blog/tree/master/item/jakob/reader/org-mode.scm][org-mode-reader]] as an alternative. I slightly adapted it to not rely on Git sub-modules (which [[https://git.sr.ht/~jakob/blog][Jakob's blog]] uses to vendor some libraries), added some additional keys for the metadata entries that my project files expect, and added a Scheme parameter that controls the name of the Emacs daemon that the =emacsclient= process should communicate with if the =HAUNT_ORG_READER_USE_EMACSCLIENT= environment variable is set to true (more on why later).
+
+Another upside of using this native =org-mode-reader= was I would be able to piggy-back from Emacs' Org export capabilities and using the [[https://github.com/hniksic/emacs-htmlize][htmlize]] library meant that the HTML output would contain [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Font-Lock-Mode.html][Font Lock Mode]] face properties, specially useful for the syntax highlighting of code blocks, so that the HTML output would basically look like a source file in your Emacs theme.
+
+It should be noted that the =org-mode-reader= expects Emacs to be available at build time, and the reader can either work by using Emacs [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Batch-Mode.html][Batch Mode]] or use =emacsclient= to evaluate the Org export process in an existing Emacs daemon. Although [[https://github.com/migalmoreno/nix-config][my personal configuration]] already starts an Emacs server and connects to it via =emacsclient=, I didn't want to require a specific Emacs setup to be available at build time for the build of the website, so I wrote a Nix [[https://nixos.wiki/wiki/Flakes][Flake]] that builds the website in a self-contained and reproducible way.
+
+#+begin_src nix
+{
+  # ...inputs
+  outputs =
+    inputs@{ nixpkgs, systems, ... }:
+    let
+      eachSystem =
+        f: nixpkgs.lib.genAttrs (import systems) (system: f (import nixpkgs { inherit system; }));
+    in
+      {
+        devShells = eachSystem (pkgs: {
+          default = pkgs.mkShell {
+            buildInputs = with pkgs; [
+              haunt
+              guile
+              (emacs.pkgs.withPackages (
+                epkgs: with epkgs; [
+                  htmlize
+                  nix-mode
+                  nginx-mode
+                  rainbow-delimiters
+                  (trivialBuild {
+                    pname = "ox-html-stable-ids";
+                    version = "0.1.1";
+                    src = pkgs.fetchFromGitHub {
+                      owner = "jeffkreeftmeijer";
+                      repo = "ox-html-stable-ids.el";
+                      rev = "0.1.1";
+                      hash = "sha256-58GQlri6Hs9MTgCgrwnI+NYGgDgfAghWNv1V02Fgjuo=";
+                    };
+                  })
+                ]
+              ))
+            ];
+            shellHook = ''
+            tmpdir=$(mktemp -d)
+            # ...rest of script removed for brevity
+            export HAUNT_ORG_READER_EMACS_DAEMON_NAME="haunt-build"
+            emacs --daemon="$HAUNT_ORG_READER_EMACS_DAEMON_NAME" -Q
+            cat > $tmpdir/preamble.el<< EOF
+            (require 'ox-html-stable-ids)
+            (org-html-stable-ids-add)
+            (setq org-html-stable-ids t)
+            (require 'nix-mode)
+            (require 'nginx-mode)
+            (require 'rainbow-delimiters)
+            (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+            EOF
+
+            export HAUNT_ORG_READER_EMACS_PREAMBLE=$tmpdir/preamble.el
+            export HAUNT_ORG_READER_USE_EMACSCLIENT=1
+            haunt build
+            emacsclient -s "$HAUNT_ORG_READER_EMACS_DAEMON_NAME" -e "(kill-emacs)"
+          '';
+          };
+        });
+      };
+}
+#+end_src
+
+The above Flake creates a default shell in =devShells= for every available system with dependencies to Haunt, Guile, and an Emacs package with the Emacs Lisp libraries it requires to properly export and syntax highlight the Org mode files that it will read. In the =shellHook=, we first set the name of the =HAUNT_ORG_READER_EMACS_DAEMON_NAME= environment variable we'll use for the build of the site, start an Emacs daemon with its name, create a =preamble.el= file in a temporary directory with the necessary configuration to set up the Org export and syntax highlighting, assign that file to =HAUNT_ORG_READER_EMACS_PREAMBLE= which will read it before running the Org export process, instruct it to use an =emacsclient= process via =HAUNT_ORG_READER_USE_EMACSCLIENT=, run the build of the site with =haunt build= and finally kill the Emacs daemon process we specifically launched for this build.
+
+Before landing on this final implementation I tried to run the build without =emacsclient= and purely rely on the =org-mode-reader= using Emacs batch mode. However, I soon realized that while the project files were being generated in the correct place, they didn't have any syntax highlighting or face properties in the HTML, which was caused by the =htmlize= package not applying the font-lock face properties when it's not run under a graphical Emacs process (which is exactly what the non-interactive =emacs --batch= does). However, I didn't want to rely on having to launch an Emacs window when building the site, or using =emacs --nw= since this doesn't work well with some shells like [[https://www.gnu.org/software/emacs/manual/html_mono/eshell.html][Eshell]]. Thus, the best middle ground I found was to use a self-contained script that creates a specialized daemon process, runs =emacsclient= on it, and finally kills the process via =emacsclient=, which allows the =htmlize= package to properly apply the =font-lock= properties to the code blocks.
+
+* Flakes to Dynamically Generate Project Documentation
+In my initial implementation, I relied on having to write a different project's documentation in my website to what was already available in the project's =README= because I didn't know of a way to display each project's =README=, written in Org Mode, inside of the custom =portfolio= builder I had. After adapting the =portfolio= builder to use the =blog= builder and introducing the =org-mode-reader=, I thought I finally had chance to change this.
+
+Ultimately, though, I didn't want to rely on having to make third-party requests neither at build time (via =curl=) nor at runtime (via JavaScript) to fetch the =README= files from a hosting site like a source forge because for one, this would mean the build wouldn't work when I didn't have a network connection, and two, I wanted the process of updating the projects documentation in the site not being coupled with the update of the projects repositories upstream. So, if I made some changes in one of my local project checkout's =README= I wanted to have the freedom to preview these changes locally and publish the site with these without being tied to having to push the changes to the project's remote first.
+
+Since I was already using Nix and Flakes to set up the build of the blog, it only made sense for me to leverage them to accomplish this task. All my projects are using flakes, so it was as easy to add them as flake inputs:
+
+#+begin_src nix
+{
+  inputs = {
+    # ...rest of inputs
+    ordenada.url = "github:migalmoreno/ordenada";
+    tubo.url = "github:migalmoreno/tubo";
+    nx-router.url = "github:migalmoreno/nx-router";
+    nx-tailor.url = "github:migalmoreno/nx-tailor";
+    nx-mosaic.url = "github:migalmoreno/nx-mosaic";
+    fdroid-el.url = "github:migalmoreno/fdroid.el";
+    nyxt-el.url = "github:migalmoreno/nyxt.el";
+  };
+
+}
+#+end_src
+
+Note that if your project is not using Flakes, you could also specify a non-flake input like the following and it would still fetch the project's checkout:
+
+#+begin_src nix
+{
+  inputs = {
+    project-name = {
+      url = "<project_url>";
+      flake = false;
+    };
+  };
+}
+#+end_src
+
+Now, I had access to each of the project's checkout as an input, which I would use in the previously mentioned =devShells= to build the documentation for every one of them before invoking =haunt build=:
+
+#+begin_src nix
+{
+  outputs =
+    inputs@{ nixpkgs, systems, ... }:
+    let
+      eachSystem =
+        f: nixpkgs.lib.genAttrs (import systems) (system: f (import nixpkgs { inherit system; }));
+    in
+      {
+        devShells = eachSystem (pkgs: {
+          default = pkgs.mkShell {
+            # ...build inputs removed for brevity
+            shellHook = ''
+            tmpdir=$(mktemp -d)
+            ${toString (
+              map
+                (name: ''
+                  cat ${./projects/${name}.org} ${
+                    if
+                      pkgs.lib.hasAttrByPath [
+                        "packages"
+                        pkgs.system
+                        "docs"
+                      ] inputs.${name}
+                    then
+                      "${inputs.${name}.packages.${pkgs.system}.docs}/index.org"
+                    else
+                      "${inputs.${name}}/README"
+                  } > $tmpdir/${name}.org
+                  ln -sf $tmpdir/${name}.org ./posts/projects/${name}.org
+                '')
+                (map (path: pkgs.lib.removeSuffix ".org" path) (builtins.attrNames (builtins.readDir ./projects)))
+            )}
+            # ...rest of script removed for brevity
+          '';
+          };
+        });
+      };
+}
+
+#+end_src
+
+The above iterates through all the projects Org files inside of =./projects=, where the project metadata (the Org properties turned into metadata that a project post would expect) lives, checks if the input has a =docs= package exposed (because a project could have a standalone project documentation package like for [[https://github.com/migalmoreno/ordenada/blob/master/flake.nix#L47][ordenada]] which dynamically generates all of its configuration options), and if so include the =index.org= file under that package, otherwise just include the =README= file, and add the project metadata file's contents along with this file's contents (via =cat=) into a file stored under =/tmp/=. This in turn, would be force sym-linked into a file under =./posts/projects/= so that the entire project documentation would be available to the Haunt build.
+
+As I mentioned earlier, I didn't want to be limited to having to push the project documentation changes to its remote in order to update a project's documentation in the site. I already follow a similar approach for the publishing of this site, where I don't couple its publishing to a typical CI/CD build step which is executed on every repository push, but I instead opt to manually instruct when and how to publish the site directly via [[https://linux.die.net/man/1/rsync][rsync]] from my local checkout.
+
+Using Flakes made this very simple. On one side, having the upstream project flake input URLs in place would mean that when I invoked this:
+
+#+begin_src sh
+nix develop --recreate-lock-file
+#+end_src
+
+It would fetch the latest changes to the project flake inputs, update them, and build a =devShell= with the newly updated dependencies.
+
+On the other hand, I could also add a custom registry flake pointing to a local project checkout like this:
+
+#+begin_src sh
+nix registry add flake:<project> path:///path/to/project
+#+end_src
+
+I chose to use custom flake registries because it's shorter than specifying the whole path and it means I don't have to hard-code the path in case I want to use a local project flake input URL in =flake.nix=, so that if I check out the site's repository under a different system it will rely on the =flake:<project>= input URL and not the full hard-coded value to the other system's path.
+
+Then, I'd be able to override the input(s) on any build with the custom project flake registry like this:
+
+#+begin_src sh
+nix develop --override-input <project> flake:<project>
+#+end_src
+
+Which builds the site with the latest changes from the local =<project>= checkout and it doesn't mutate the Flake lock file.
