@@ -390,11 +390,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1730531603,
-        "narHash": "sha256-Dqg6si5CqIzm87sp57j5nTaeBbWhHFaVyG7V6L8k3lY=",
+        "lastModified": 1730785428,
+        "narHash": "sha256-Zwl8YgTVJTEum+L+0zVAWvXAGbWAuXHax3KzuejaDyo=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "7ffd9ae656aec493492b44d0ddfb28e79a1ea25d",
+        "rev": "4aa36568d413aca0ea84a1684d2d46f55dbabad7",
         "type": "github"
       },
       "original": {
@@ -555,11 +555,11 @@
         "systems": "systems_3"
       },
       "locked": {
-        "lastModified": 1730757468,
-        "narHash": "sha256-hlMvrUC0fUb7CpHKcgZ/qdFpaRwkE9j0hCHmQcE9tk8=",
+        "lastModified": 1731152224,
+        "narHash": "sha256-bjz57LRo8GshycnAtWAidy9xXqTU3DSSQtGDxan1MPc=",
         "owner": "migalmoreno",
         "repo": "nx-router",
-        "rev": "c902fcfb561396bb14b119f77c9143795eff83cc",
+        "rev": "74e4e876aa073e155476d4969cdcebd428b651e2",
         "type": "github"
       },
       "original": {
@@ -593,11 +593,11 @@
         "systems": "systems_5"
       },
       "locked": {
-        "lastModified": 1730744325,
-        "narHash": "sha256-w6U4DyLexoWMoWNAf2w19l88myQhFS2k2yss5HAbBQY=",
+        "lastModified": 1730749152,
+        "narHash": "sha256-m6xnx4RjKGYej+z5Q1eXuHcQTCeaD4TDHcTSm3oyDuc=",
         "owner": "migalmoreno",
         "repo": "nyxt.el",
-        "rev": "bcaaccddc6f98adc56f7898e6f103793ddf24a21",
+        "rev": "f26834d37ae16e82ac8666a05959182652b412af",
         "type": "github"
       },
       "original": {
