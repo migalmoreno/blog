@@ -296,9 +296,10 @@ correct practices. Particularly interested in functional programming."))
                           ,(anchor "See all" "/blog")))
               (div (@ (class "blog-entries"))
                    ,(blog-entries site
-                                  (remove (lambda (post)
-                                            (post-ref post 'projects))
-                                          posts))))
+                                  (posts/reverse-chronological
+                                   (remove (lambda (post)
+                                             (post-ref post 'projects))
+                                           posts)))))
          (div (@ (class "portfolio portfolio--type-preview"))
               (h2 (@ (class "portfolio__title")) "Projects"
                   (button (@ (class "button button--type-border"))
