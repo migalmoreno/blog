@@ -11,10 +11,15 @@
   --magenta-cooler: #531ab6;
   --red: #a60000;
   --red-warmer: #972500;
+  --red-faint: #7f0000;
   --cyan-intense: #008899;
+  --cyan-faint: #3f578f;
   --yellow-intense: #808000;
+  --yellow-faint: #624416;
   --green-intense: #008900;
+  --green-faint: #2a5045;
   --blue-warmer: #3548cf;
+  --blue-faint: #193668;
   --navbar-height: 80px;
 }
 
@@ -32,10 +37,15 @@
     --magenta-cooler: #b6a0ff;
     --red: #ff5f59;
     --red-warmer: #ff6b55;
+    --red-faint: #ff9580;
     --cyan-intense: #00eff0;
+    --cyan-faint: #9ac8e0;
     --yellow-intense: #efef00;
+    --yellow-faint: #d2b580;
     --green-intense: #44df44;
+    --green-faint: #88ca9f;
     --blue-warmer: #79a8ff;
+    --blue-faint: #82b0ec;
   }
 }
 
@@ -70,6 +80,38 @@ h2,
 h3,
 h4 {
   word-break: break-word;
+}
+
+h1 {
+  color: var(--fg-main);
+}
+
+h2 {
+  color: var(--yellow-faint);
+}
+
+h3 {
+  color: var(--blue-faint);
+}
+
+h4 {
+  color: var(--magenta);
+}
+
+h5 {
+  color: var(--green-faint);
+}
+
+h6 {
+  color: var(--red-faint);
+}
+
+h7 {
+  color: var(--cyan-faint);
+}
+
+h8 {
+  color: var(--fg-dim);
 }
 
 .main {
