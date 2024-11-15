@@ -754,10 +754,8 @@ div[id*="container-ordenada"] {
   margin-bottom: 3rem;
 }
 
-div[id*="container-ordenada"] p:has(i):has(code) {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+div[id*="container-ordenada"] div[id*="text-ordenada"] {
+  padding-left: 25px;
 }
 
 div[id*="container-ordenada"] p:has(i):has(a) {
@@ -866,6 +864,10 @@ div[id*="container-ordenada"] p:has(i):has(a) > a {
 
   .tag {
     font-size: 0.7rem;
+  }
+
+  div[id*="container-ordenada"] div[id*="text-ordenada"] {
+    padding-left: 15px;
   }
 }
 
